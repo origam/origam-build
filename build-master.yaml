@@ -69,4 +69,38 @@ jobs:
            **\*test*.dll
            !**\*TestAdapter.dll
            !**\obj\**
-         searchFolder: '$(System.DefaultWorkingDirectory)'
+         searchFolder: '$(Agent.BuildDirectory)\s\origam-source\'
+     - task: CopyFiles@2
+       displayName: 'Copy OrigamScheduler to: $(build.artifactstagingdirectory)\origam-architect'
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamScheduler\bin\Release\'
+         Contents: |
+           **\*.dll
+           **\*.exe
+           **\*.pdb
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-architect'
+       condition: succeededOrFailed()
+     - task: CopyFiles@2
+       displayName: 'Copy Architect to: $(build.artifactstagingdirectory)\origam-architect'
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamArchitect\bin\Release\'
+         Contents: |
+           **\*.dll
+           **\*.exe
+           **\*.pdb
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-architect'
+       condition: succeededOrFailed()
+     - task: CopyFiles@2
+       displayName: 'Copy External Architect Dlls to: $(build.artifactstagingdirectory)\origam-architect'
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\'
+         Contents: 'EnterpriseLibrary\Interop.MSCommLib.dll'
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-architect'
+         flattenFolders: true
+       condition: succeededOrFailed()
+     - task: PublishBuildArtifacts@1
+       displayName: 'Publish Artifact: origam-architect'
+       inputs:
+         PathtoPublish: '$(build.artifactstagingdirectory)\origam-architect'
+         ArtifactName: origam-architect
+       condition: succeededOrFailed()

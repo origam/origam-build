@@ -246,3 +246,17 @@ jobs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-setup'
          ArtifactName: origam-setup
        condition: succeededOrFailed()
+     - script: |
+        set MsBuildEmitSolution=1
+        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\origam-source\Origam.sln /pp -v:m
+        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\origam-source\Origam.sln /p:Configuration="Release Server" /t:Server\Origam_ServerCore:Publish -v:m
+       displayName: 'Build HTML5 Server'
+     - task: CopyFiles@2
+       displayName: 'Copy HTML5 Server to: $(build.artifactstagingdirectory)\origam-html'
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\bin\Release\net5.0\publish\'
+         Contents: |
+           **\*.*
+           !*.config
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-html'
+       condition: succeededOrFailed()

@@ -4,6 +4,8 @@ name: $(Build.BuildId)
 variables:
 - name: NUGET_PACKAGES # location of nuget packages (used by cache)
   value: $(Pipeline.Workspace)/.nuget/packages
+- name: YARN_CACHE_FOLDER # location of yarn cache
+  value: $(Pipeline.Workspace)/.yarn
 - name: BRANCH # branch to be used
   value: master
 - name: VERSION_NUMBER # version number of the build
@@ -41,12 +43,24 @@ jobs:
        displayName: 'Use NuGet 5.8'
        inputs:
          versionSpec: 5.8
+     - task: NodeTool@0
+       displayName: 'Use Node 11.x'
+       inputs:
+         versionSpec: 11.x
+     - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
+       displayName: 'Use Yarn 1.x'
      - task: Cache@2
        displayName: 'NuGet Cache'
        inputs:
          key: 'nuget-2021-04-11-01 | "$(Agent.OS)" | $(Agent.BuildDirectory)/s/origam-source/**/*.sln,!$(Agent.BuildDirectory)/s/origam-source/**/bin/**'
          path: '$(NUGET_PACKAGES)'
          restoreKeys: 'nuget-2021-04-11-01 | "$(Agent.OS)"'
+     - task: Cache@2
+       displayName: 'Yarn Cache'
+       inputs:
+         key: 'yarn-2021-04-08-01 | "$(Agent.OS)" | yarn.lock'
+         path: '$(YARN_CACHE_FOLDER)'
+         restoreKeys: 'yarn-2021-04-08-01 | "$(Agent.OS)"'
      - task: NuGetCommand@2
        displayName: 'NuGet restore'
        inputs:
@@ -260,3 +274,16 @@ jobs:
            !*.config
          TargetFolder: '$(build.artifactstagingdirectory)\origam-html'
        condition: succeededOrFailed()
+     - script: |
+        yarn --frozen-lockfile
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-html\
+       displayName: yarn
+     - script: |
+        yarn build
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-html\
+       displayName: yarn build
+     - task: CopyFiles@2
+       displayName: 'HTML Client to: $(build.artifactstagingdirectory)\origam-html'
+       inputs:
+         SourceFolder: '$(build.artifactstagingdirectory)\origam-html\build'
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-html\clients\origam'

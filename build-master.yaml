@@ -299,9 +299,9 @@ jobs:
         set MsBuildEmitSolution=1
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\origam-source\Origam.sln /pp -v:m
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\origam-source\Origam.sln /p:Configuration="Release Server" /t:Server\Origam_ServerCore:Publish -v:m
-       displayName: 'Build HTML5 Server'
+       displayName: 'Build HTML Server'
      - task: CopyFiles@2
-       displayName: 'Copy HTML5 Server to: $(build.artifactstagingdirectory)\origam-html'
+       displayName: 'Copy HTML Server to: $(build.artifactstagingdirectory)\origam-html'
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\bin\Release\net5.0\publish\'
          Contents: |
@@ -309,6 +309,14 @@ jobs:
            !*.config
          TargetFolder: '$(build.artifactstagingdirectory)\origam-html'
        condition: succeededOrFailed()
+     - task: DeleteFiles@1
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\bin\Release\'
+         Contents: |
+           source\**\*.*
+           server_source\**\*.*
+         RemoveSourceFolder: true
+       displayName: 'HTML Server clean up'
      - script: |
         yarn --frozen-lockfile
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html\

@@ -1,20 +1,25 @@
 name: $(Build.BuildId)
 
+
+variables:
+- name: NUGET_PACKAGES
+  value: $(Pipeline.Workspace)/.nuget/packages
+- name: BRANCH
+  value: master
+
+
 resources:
   repositories:
    - repository: origam-source
      type: github
      endpoint: https://github.com/origam/
      name: origam/origam-source
+     ref: $(BRANCH)
    - repository: origam-html
      type: github
      endpoint: https://github.com/origam/
      name: origam/origam-html
-
-
-variables:
-- name: NUGET_PACKAGES
-  value: $(Pipeline.Workspace)/.nuget/packages
+     ref: $(BRANCH)
 
 
 jobs:
@@ -25,12 +30,6 @@ jobs:
     steps:
      - checkout: origam-source
      - checkout: origam-html
-     - powershell: | 
-        $origamBuildNumber = [int]$(Build.BuildId) + 5300
-        Write-Host "##vso[task.setvariable variable=OrigamBuildNumber;]$origamBuildNumber"
-
-        
-       displayName: 'Set up Origam Build Number'
      - task: NuGetToolInstaller@0
        displayName: 'Use NuGet 5.8'
        inputs:

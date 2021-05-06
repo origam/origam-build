@@ -137,3 +137,82 @@ jobs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-client'
          ArtifactName: origam-client
        condition: succeededOrFailed()
+     - task: VSBuild@1
+       displayName: 'Build Server'
+       inputs:
+         solution: '$(Agent.BuildDirectory)/s/origam-source/**/*.sln'
+         platform: 'Any CPU'
+         configuration: 'Release Server'
+         msbuildArchitecture: 'x64'
+     - task: MSBuild@1
+       displayName: 'Build LDAPMembershipProvider'
+       inputs:
+         solution: $(Agent.BuildDirectory)/s/origam-source/ORIGAMMembershipProvider/LDAPMembershipProvider.csproj
+         msbuildArchitecture: x64
+         configuration: 'Release Server'
+     - task: CopyFiles@2
+       displayName: 'Copy Server Dlls to: $(build.artifactstagingdirectory)\origam-web\bin'
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\Origam.Server\bin\Release\'
+         Contents: |
+           **\*.dll
+           **\*.pdb
+           **\*.exe
+           !**\Microsoft.AspNetCore.Http.Abstractions.dll
+           !**\Microsoft.Extensions.Configuration.Abstractions.dll
+           !**\Microsoft.Extensions.Logging.Abstractions.dll
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-web\bin'
+       condition: succeededOrFailed()
+     - task: CopyFiles@2
+       displayName: 'Copy External Dlls to: $(build.artifactstagingdirectory)\origam-web\bin'
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\'
+         Contents: |
+           EnterpriseLibrary\FluorineFx.dll
+           EnterpriseLibrary\Interop.MSCommLib.dll
+           EnterpriseLibrary\Microsoft.AspNet.Identity.Owin.dll
+           OrigamMembershipProvider\bin\Release\LDAPMembershipProvider.dll
+           OrigamMembershipProvider\bin\Release\LDAPMembershipProvider.pdb
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-web\bin'
+         flattenFolders: true
+       condition: succeededOrFailed()
+     - task: CopyFiles@2
+       displayName: 'Copy Web Files to: $(build.artifactstagingdirectory)\origam-web'
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\web'
+         Contents: |
+           css\**\*.*
+           assets\**\*.*
+           upgrade\**\*.*
+           js\**\*.*
+           bin\*.dll
+           WEB-INF\**\*.*
+           *
+           !*.config
+           !*.swf
+           !*.aspx
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-web'
+       condition: succeededOrFailed()
+     - powershell: |
+        $source = "$(Agent.BuildDirectory)\s\origam-source\web\App_Code\Startup.cs"; $destination = "$(build.artifactstagingdirectory)\origam-web\App_Code\Startup.cs_"
+        # Create the folder structure and empty destination file, similar to
+        # the Unix 'touch' command
+        New-Item -ItemType File -Path $destination -Force
+        Copy-Item $source $destination -Force
+       displayName: 'Copy Startup.cs'
+     - powershell: |
+        Copy-Item $(Agent.BuildDirectory)\s\origam-source\web\Portal.swf $(build.artifactstagingdirectory)\origam-web\Portal_$(VERSION_NUMBER).swf
+        Copy-Item $(Agent.BuildDirectory)\s\origam-source\web\Portal_dbg.swf $(build.artifactstagingdirectory)\origam-web\Portal_$(VERSION_NUMBER)_dbg.swf
+        Copy-Item $(Agent.BuildDirectory)\s\origam-source\web\theme.swf $(build.artifactstagingdirectory)\origam-web\theme_$(VERSION_NUMBER).swf
+        Copy-Item $(Agent.BuildDirectory)\s\origam-source\web\theme.swf $(build.artifactstagingdirectory)\origam-web\theme.swf
+   
+        $buildNumber = $($env:OrigamBuildNumber)
+        $config = "<appPortalSettings><add key=`"swfFile`" value=`"Portal_$(VERSION_NUMBER)`"/><add key=`"themeFile`" value=`"theme_$(VERSION_NUMBER)`"/></appPortalSettings>"
+        $config|Set-Content $(build.artifactstagingdirectory)\origam-web\portal.config
+       displayName: 'Copy Flash UI'
+     - task: PublishBuildArtifacts@1
+       displayName: 'Publish Artifact: origam-web'
+       inputs:
+         PathtoPublish: '$(build.artifactstagingdirectory)\origam-web'
+         ArtifactName: origam-web
+       condition: succeededOrFailed()

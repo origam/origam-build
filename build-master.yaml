@@ -36,6 +36,7 @@ jobs:
     steps:
      - checkout: origam-source
      - checkout: origam-html
+     - checkout: origam-model
      - task: NuGetToolInstaller@0
        displayName: 'Use NuGet 5.8'
        inputs:

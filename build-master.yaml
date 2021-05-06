@@ -1,0 +1,50 @@
+name: $(Build.BuildId)
+
+resources:
+  repositories:
+   - repository: origam-source
+     type: github
+     endpoint: https://github.com/origam/
+     name: origam/origam-source
+   - repository: origam-html
+     type: github
+     endpoint: https://github.com/origam/
+     name: origam/origam-html
+
+
+variables:
+- name: NUGET_PACKAGES
+  value: $(Pipeline.Workspace)/.nuget/packages
+
+
+jobs:
+  - job: BuildOrigam
+    displayName: Build Origam
+    pool:
+      vmImage: windows-2019
+    steps:
+     - checkout: self
+     - checkout: origam-html
+     - powershell: | 
+        $origamBuildNumber = [int]$(Build.BuildId) + 5300
+        Write-Host "##vso[task.setvariable variable=OrigamBuildNumber;]$origamBuildNumber"
+
+        
+       displayName: 'Set up Origam Build Number'
+     - task: NuGetToolInstaller@0
+       displayName: 'Use NuGet 5.8'
+       inputs:
+         versionSpec: 5.8
+     - task: Cache@2
+       displayName: 'NuGet Cache'
+       inputs:
+         key: 'nuget-2021-04-11-01 | "$(Agent.OS)" | **/*.sln,!**/bin/**'
+         path: '$(NUGET_PACKAGES)'
+         restoreKeys: 'nuget-2021-04-11-01 | "$(Agent.OS)"'
+     - task: NuGetCommand@2
+       displayName: 'NuGet restore'
+       inputs:
+         command: 'restore'
+         restoreSolution: '**\*.sln'
+         feedsToUse: 'select'
+     - script: echo "Hello World!"

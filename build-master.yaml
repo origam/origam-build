@@ -324,16 +324,16 @@ jobs:
          TargetFolder: '$(build.artifactstagingdirectory)\origam-html\clients\origam'
      - script: |
         yarn --frozen-lockfile
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\client
        displayName: yarn
      - script: |
         yarn build
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\client
        displayName: yarn build
      - task: CopyFiles@2
        displayName: 'HTML Chat to: $(build.artifactstagingdirectory)\origam-html'
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-html-chat\build'
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-html-chat\client\build'
          TargetFolder: '$(build.artifactstagingdirectory)\origam-html\clients\chat'
      - task: PublishBuildArtifacts@1
        displayName: 'Publish Artifact: origam-html'

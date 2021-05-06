@@ -314,5 +314,5 @@ jobs:
      - task: CopyFiles@2
        displayName: 'HTML Client to: $(build.artifactstagingdirectory)\origam-html'
        inputs:
-         SourceFolder: '$(build.artifactstagingdirectory)\origam-html\build'
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-html\build'
          TargetFolder: '$(build.artifactstagingdirectory)\origam-html\clients\origam'

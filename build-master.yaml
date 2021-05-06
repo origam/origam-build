@@ -2,11 +2,12 @@ name: $(Build.BuildId)
 
 
 variables:
-- name: NUGET_PACKAGES
+- name: NUGET_PACKAGES # location of nuget packages (used by cache)
   value: $(Pipeline.Workspace)/.nuget/packages
-- name: BRANCH
+- name: BRANCH # branch to be used
   value: master
-
+- name: VERSION_NUMBER # version number of the build
+  value: 0.0.1.$(Build.BuildId)
 
 resources:
   repositories:
@@ -46,4 +47,10 @@ jobs:
          command: 'restore'
          restoreSolution: '$(Agent.BuildDirectory)/s/origam-source/**/*.sln'
          feedsToUse: 'select'
-     - script: echo "Hello World!"
+     - powershell: |
+        $fileName = Get-ChildItem "**\AssemblyInfo.cs" -Recurse
+        $filename | %{
+         (gc $_) -replace "0.0.0.0", "$(VERSION_NUMBER)" |Set-Content $_.fullname
+        }
+        (Get-Content "Origam.ServerCore\Controller\AboutController.cs") -replace "Placeholder to be changed at build time", "$(VERSION_NUMBER)" | Set-Content "Origam.ServerCore\Controller\AboutController.cs"
+       displayName: 'Build Number'

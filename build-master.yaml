@@ -23,7 +23,7 @@ jobs:
     pool:
       vmImage: windows-2019
     steps:
-     - checkout: self
+     - checkout: origam-source
      - checkout: origam-html
      - powershell: | 
         $origamBuildNumber = [int]$(Build.BuildId) + 5300

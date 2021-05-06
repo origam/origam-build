@@ -28,6 +28,11 @@ resources:
      endpoint: https://github.com/origam/
      name: origam/origam-model
      ref: $(BRANCH)
+   - repository: origam-html-chat
+     type: github
+     endpoint: https://github.com/origam/
+     name: origam/origam-html-chat
+     ref: $(BRANCH)
 
 
 jobs:
@@ -39,6 +44,7 @@ jobs:
      - checkout: origam-source
      - checkout: origam-html
      - checkout: origam-model
+     - checkout: origam-html-chat
      - task: NuGetToolInstaller@0
        displayName: 'Use NuGet 5.8'
        inputs:
@@ -58,7 +64,7 @@ jobs:
      - task: Cache@2
        displayName: 'Yarn Cache'
        inputs:
-         key: 'yarn-2021-04-08-01 | "$(Agent.OS)" | $(Agent.BuildDirectory)/s/origam-html/yarn.lock'
+         key: 'yarn-2021-04-08-01 | "$(Agent.OS)" | $(Agent.BuildDirectory)/s/origam-html/yarn.lock,$(Agent.BuildDirectory)/s/origam-html-chat/yarn.lock'
          path: '$(YARN_CACHE_FOLDER)'
          restoreKeys: 'yarn-2021-04-08-01 | "$(Agent.OS)"'
      - task: NuGetCommand@2
@@ -316,3 +322,22 @@ jobs:
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-html\build'
          TargetFolder: '$(build.artifactstagingdirectory)\origam-html\clients\origam'
+     - script: |
+        yarn --frozen-lockfile
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\
+       displayName: yarn
+     - script: |
+        yarn build
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\
+       displayName: yarn build
+     - task: CopyFiles@2
+       displayName: 'HTML Chat to: $(build.artifactstagingdirectory)\origam-html'
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-html-chat\build'
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-html\clients\chat'
+     - task: PublishBuildArtifacts@1
+       displayName: 'Publish Artifact: origam-html'
+       inputs:
+         PathtoPublish: '$(build.artifactstagingdirectory)\origam-html'
+         ArtifactName: origam-html
+       condition: succeededOrFailed()

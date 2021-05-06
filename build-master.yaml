@@ -157,6 +157,13 @@ jobs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-client'
          ArtifactName: origam-client
        condition: succeededOrFailed()
+     - task: DeleteFiles@1
+       inputs:
+         SourceFolder: '$(build.artifactstagingdirectory)\origam-client'
+         Contents: |
+           **\*.*
+         RemoveSourceFolder: true
+       displayName: 'origam-client clean up'
      - task: VSBuild@1
        displayName: 'Build Server'
        inputs:
@@ -260,6 +267,28 @@ jobs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-setup'
          ArtifactName: origam-setup
        condition: succeededOrFailed()
+     - task: DeleteFiles@1
+       inputs:
+         SourceFolder: '$(build.artifactstagingdirectory)\origam-architect'
+         Contents: |
+           **\*.*
+         RemoveSourceFolder: true
+       displayName: 'origam-architect clean up'
+     - task: DeleteFiles@1
+       inputs:
+         SourceFolder: '$(build.artifactstagingdirectory)\origam-web'
+         Contents: |
+           **\*.*
+         RemoveSourceFolder: true
+       displayName: 'origam-web clean up'
+     - task: DeleteFiles@1
+       inputs:
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamSetup'
+         Contents: |
+           source\**\*.*
+           server_source\**\*.*
+         RemoveSourceFolder: true
+       displayName: 'origam-setup clean up'
      - script: |
         set MsBuildEmitSolution=1
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\origam-source\Origam.sln /pp -v:m

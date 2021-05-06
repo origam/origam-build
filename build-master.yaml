@@ -54,3 +54,19 @@ jobs:
         }
         (Get-Content "$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\Controller\AboutController.cs") -replace "Placeholder to be changed at build time", "$(VERSION_NUMBER)" | Set-Content "$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\Controller\AboutController.cs"
        displayName: 'Build Number'
+     - task: VSBuild@1
+       displayName: 'Build Architect'
+       inputs:
+         solution: '$(Agent.BuildDirectory)/s/origam-source/**/*.sln'
+         platform: 'Any CPU'
+         configuration: 'Release Architect'
+         msbuildArchitecture: 'x64'
+     - task: VSTest@2
+       displayName: 'Run Tests'
+       inputs:
+         testSelector: 'testAssemblies'
+         testAssemblyVer2: |
+           **\*test*.dll
+           !**\*TestAdapter.dll
+           !**\obj\**
+         searchFolder: '$(System.DefaultWorkingDirectory)'

@@ -37,13 +37,13 @@ jobs:
      - task: Cache@2
        displayName: 'NuGet Cache'
        inputs:
-         key: 'nuget-2021-04-11-01 | "$(Agent.OS)" | **/*.sln,!**/bin/**'
+         key: 'nuget-2021-04-11-01 | "$(Agent.OS)" | $(Agent.BuildDirectory)/s/origam-source/**/*.sln,!$(Agent.BuildDirectory)/s/origam-source/**/bin/**'
          path: '$(NUGET_PACKAGES)'
          restoreKeys: 'nuget-2021-04-11-01 | "$(Agent.OS)"'
      - task: NuGetCommand@2
        displayName: 'NuGet restore'
        inputs:
          command: 'restore'
-         restoreSolution: '**\*.sln'
+         restoreSolution: '$(Agent.BuildDirectory)/s/origam-source/**/*.sln'
          feedsToUse: 'select'
      - script: echo "Hello World!"

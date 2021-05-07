@@ -44,11 +44,15 @@ jobs:
       vmImage: windows-2019
     steps:
      - checkout: origam-source
+       fetchDepth: 1
        persistCredentials: true
      - checkout: origam-html
+       fetchDepth: 1
        persistCredentials: true
      - checkout: origam-model
+       fetchDepth: 1
      - checkout: origam-html-chat
+       fetchDepth: 1
      - task: NuGetToolInstaller@0
        displayName: 'Use NuGet 5.8'
        inputs:

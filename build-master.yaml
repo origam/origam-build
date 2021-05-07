@@ -51,6 +51,7 @@ jobs:
        workingDirectory: $(Agent.BuildDirectory)\s\origam-source
        displayName: 'Tag origam-source with $(TAG)'
      - checkout: origam-html
+       persistCredentials: true
      - checkout: origam-model
      - checkout: origam-html-chat
      - task: NuGetToolInstaller@0
@@ -379,6 +380,6 @@ jobs:
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model/*
            $(Build.ArtifactStagingDirectory)/origam-html/*
-           $(Build.ArtifactStagingDirectory)/origam-html/*
+           $(Build.ArtifactStagingDirectory)/origam-setup/*
          addChangeLog: false
        displayName: GitHub Release

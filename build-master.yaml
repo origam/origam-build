@@ -317,8 +317,7 @@ jobs:
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\bin\Release\'
          Contents: |
-           source\**\*.*
-           server_source\**\*.*
+           **\*.*
          RemoveSourceFolder: true
        displayName: 'HTML Server clean up'
      - script: |

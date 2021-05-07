@@ -324,11 +324,11 @@ jobs:
      - script: |
         yarn --frozen-lockfile
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html\
-       displayName: yarn
+       displayName: 'origam-html yarn'
      - script: |
         yarn build
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html\
-       displayName: yarn build
+       displayName: 'origam-html yarn build'
      - task: CopyFiles@2
        displayName: 'HTML Client to: $(build.artifactstagingdirectory)\origam-html'
        inputs:
@@ -337,11 +337,11 @@ jobs:
      - script: |
         yarn --frozen-lockfile
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\client
-       displayName: yarn
+       displayName: 'origam-html-chat yarn'
      - script: |
         yarn build
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\client
-       displayName: yarn build
+       displayName: 'origam-html-chat yarn build'
      - task: CopyFiles@2
        displayName: 'HTML Chat to: $(build.artifactstagingdirectory)\origam-html'
        inputs:

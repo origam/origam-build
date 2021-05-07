@@ -46,6 +46,11 @@ jobs:
       vmImage: windows-2019
     steps:
      - checkout: origam-source
+     - script: |
+        git tag $(TAG)
+        git push origin $(TAG)
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-source
+       displayName: 'Tag origam-source with $(TAG)'
      - checkout: origam-html
      - checkout: origam-model
      - checkout: origam-html-chat

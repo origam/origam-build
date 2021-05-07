@@ -20,13 +20,11 @@ resources:
      endpoint: https://github.com/origam/
      name: origam/origam-source
      ref: $(BRANCH)
-     persistCredentials: true
    - repository: origam-html
      type: github
      endpoint: https://github.com/origam/
      name: origam/origam-html
      ref: $(BRANCH)
-     persistCredentials: true
    - repository: origam-model
      type: github
      endpoint: https://github.com/origam/
@@ -46,6 +44,7 @@ jobs:
       vmImage: windows-2019
     steps:
      - checkout: origam-source
+       persistCredentials: true
      - script: |
         git tag $(TAG)
         git push origin $(TAG)

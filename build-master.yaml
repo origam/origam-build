@@ -45,11 +45,6 @@ jobs:
     steps:
      - checkout: origam-source
        persistCredentials: true
-     - script: |
-        git tag $(TAG)
-        git push origin $(TAG)
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-source
-       displayName: 'Tag origam-source with $(TAG)'
      - checkout: origam-html
        persistCredentials: true
      - checkout: origam-model

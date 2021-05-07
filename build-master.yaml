@@ -10,6 +10,8 @@ variables:
   value: master
 - name: VERSION_NUMBER # version number of the build
   value: 0.0.1.$(Build.BuildId)
+- name: TAG # tag to be used
+  value: master-latest
 
 resources:
   repositories:
@@ -18,11 +20,13 @@ resources:
      endpoint: https://github.com/origam/
      name: origam/origam-source
      ref: $(BRANCH)
+     persistCredentials: true
    - repository: origam-html
      type: github
      endpoint: https://github.com/origam/
      name: origam/origam-html
      ref: $(BRANCH)
+     persistCredentials: true
    - repository: origam-model
      type: github
      endpoint: https://github.com/origam/
@@ -349,3 +353,28 @@ jobs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-html'
          ArtifactName: origam-html
        condition: succeededOrFailed()
+     - script: |
+        git tag $(TAG)
+        git push origin $(TAG)
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-source
+       displayName: 'Tag origam-source with $(TAG)'
+     - script: |
+        git tag $(TAG)
+        git push origin $(TAG)
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-html
+       displayName: 'Tag origam-html with $(TAG)'
+     - task: GitHubRelease@1
+       inputs:
+         gitHubConnection: 'https://github.com/origam/'
+         repositoryName: 'origam/origam-source'
+         action: 'create'
+         target: '$(Build.SourceVersion)'
+         tagSource: 'userSpecifiedTag'
+         tag: '$(TAG)'
+         title: '$(TAG)'
+         assets: |
+           $(Build.ArtifactStagingDirectory)/origam-model/*
+           $(Build.ArtifactStagingDirectory)/origam-html/*
+           $(Build.ArtifactStagingDirectory)/origam-html/*
+         addChangeLog: false
+       displayName: GitHub Release

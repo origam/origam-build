@@ -371,12 +371,12 @@ jobs:
        displayName: Delete previous GitHub release
        continueOnError: true
      - script: |
-        git -f -a tag $(TAG)
+        git tag -f -a $(TAG)
         git push -f origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-source
        displayName: 'Tag origam-source with $(TAG)'
      - script: |
-        git -f -a tag $(TAG)
+        git tag -f -a $(TAG)
         git push -f origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html
        displayName: 'Tag origam-html with $(TAG)'

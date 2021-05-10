@@ -324,11 +324,12 @@ jobs:
        condition: succeededOrFailed()
      - task: DeleteFiles@1
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\bin\Release\'
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\'
          Contents: |
-           **\*.*
-         RemoveSourceFolder: true
-       displayName: 'HTML Server clean up'
+           **/bin/*
+           **/obj/*
+         RemoveSourceFolder: false
+       displayName: 'Complete origam-source clean up'
      - script: |
         yarn --frozen-lockfile
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html\

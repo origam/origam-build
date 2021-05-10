@@ -362,6 +362,14 @@ jobs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-html'
          ArtifactName: origam-html
        condition: succeededOrFailed()
+     - task: GitHubRelease@1
+       inputs:
+         gitHubConnection: 'https://github.com/origam/'
+         repositoryName: 'origam/origam-source'
+         action: 'delete'
+         tag: '$(TAG)'
+       displayName: Delete previous GitHub release
+       continueOnError: true
      - script: |
         git -f -a tag $(TAG)
         git push -f origin $(TAG)
@@ -376,14 +384,6 @@ jobs:
         & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Build.ArtifactStagingDirectory)\origam-html", "$(build.artifactstagingdirectory)\origam-html.zip"); }
         & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Agent.BuildDirectory)\s\origam-model", "$(build.artifactstagingdirectory)\origam-model.zip"); }
        displayName: Zip files for release
-     - task: GitHubRelease@1
-       inputs:
-         gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/origam-source'
-         action: 'delete'
-         tag: '$(TAG)'
-       displayName: Delete previous GitHub release
-       continueOnError: true
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'

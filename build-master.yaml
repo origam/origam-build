@@ -371,6 +371,10 @@ jobs:
         git push origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html
        displayName: 'Tag origam-html with $(TAG)'
+     - powershell: |
+        & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Build.ArtifactStagingDirectory)\origam-html", "$(build.artifactstagingdirectory)\origam-html.zip"); }
+        & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Agent.BuildDirectory)\s\origam-model", "$(build.artifactstagingdirectory)\origam-model.zip"); }
+       displayName: Zip files for release
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
@@ -383,8 +387,8 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: 'The latest master build.'
          assets: |
-           $(Build.ArtifactStagingDirectory)/origam-model/*
-           $(Build.ArtifactStagingDirectory)/origam-html/*
-           $(Build.ArtifactStagingDirectory)/origam-setup/*
+           $(Build.ArtifactStagingDirectory)/origam-model.zip
+           $(Build.ArtifactStagingDirectory)/origam-html.zip
+           $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
          addChangeLog: false
        displayName: GitHub Release

@@ -380,6 +380,14 @@ jobs:
        inputs:
          gitHubConnection: 'https://github.com/origam/'
          repositoryName: 'origam/origam-source'
+         action: 'delete'
+         tag: '$(TAG)'
+       displayName: Delete previous GitHub release
+       continueOnError: true
+     - task: GitHubRelease@1
+       inputs:
+         gitHubConnection: 'https://github.com/origam/'
+         repositoryName: 'origam/origam-source'
          action: 'edit'
          target: $(ORIGAM_SOURCE_COMMIT_ID)
          tagSource: 'userSpecifiedTag'
@@ -392,7 +400,7 @@ jobs:
            $(Build.ArtifactStagingDirectory)/origam-html.zip
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
          addChangeLog: false
-       displayName: GitHub Release
+       displayName: Create new GitHub release
   - job: BuildDocker
     displayName: Build Docker
     dependsOn: BuildOrigam

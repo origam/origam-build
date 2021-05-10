@@ -29,8 +29,6 @@ variables:
   value: $(Pipeline.Workspace)/.nuget/packages
 - name: YARN_CACHE_FOLDER # location of yarn cache
   value: $(Pipeline.Workspace)/.yarn
-- name: ORIGAM_SOURCE_COMMIT_ID # needed for release step
-  value: $[resources.repositories['origam-source'].ref]
 - name: BRANCH # branch to be used
   value: master
 - name: VERSION_NUMBER # version number of the build
@@ -45,11 +43,14 @@ jobs:
     pool:
       vmImage: windows-2019
     steps:
-     - script: |
-         echo "origam-source commit - $(ORIGAM_SOURCE_COMMIT_ID)"
      - checkout: origam-source
        fetchDepth: 1
        persistCredentials: true
+     - powershell: |
+         $commitId = (get rev-parse HEAD)
+         Write-Host '##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID]$commitId'
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-source)
+     - script: echo "$(ORIGAM_SOURCE_COMMIT_ID)"
      - checkout: origam-html
        fetchDepth: 1
        persistCredentials: true
@@ -375,7 +376,7 @@ jobs:
          gitHubConnection: 'https://github.com/origam/'
          repositoryName: 'origam/origam-source'
          action: 'create'
-         target: $[resources.repositories['origam-source'].ref]
+         target: $(ORIGAM_SOURCE_COMMIT_ID)
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG)'
          title: '$(TAG)'

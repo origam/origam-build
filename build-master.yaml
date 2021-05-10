@@ -395,6 +395,7 @@ jobs:
        displayName: GitHub Release
   - job: BuildDocker
     displayName: Build Docker
+    dependsOn: BuildOrigam
     pool:
       vmImage: ubuntu-16.04
     steps:

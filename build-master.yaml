@@ -47,7 +47,7 @@ jobs:
        fetchDepth: 1
        persistCredentials: true
      - script: |
-        git tag --author="$(GIT_AUTHOR)" -f -a $(TAG)
+        git tag -f -a $(TAG)
         git push -f origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-source
        displayName: 'Tag origam-source with $(TAG)'

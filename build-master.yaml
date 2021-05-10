@@ -47,9 +47,8 @@ jobs:
        fetchDepth: 1
        persistCredentials: true
      - powershell: |
-         $commitId = (git rev-parse HEAD)
+         $commitId = (git -C $(Agent.BuildDirectory)\s\origam-source rev-parse HEAD)
          Write-Host '##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID]$commitId'
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-source)
      - script: echo "$(ORIGAM_SOURCE_COMMIT_ID)"
      - checkout: origam-html
        fetchDepth: 1

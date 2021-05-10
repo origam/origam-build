@@ -379,7 +379,7 @@ jobs:
        inputs:
          gitHubConnection: 'https://github.com/origam/'
          repositoryName: 'origam/origam-source'
-         action: 'create'
+         action: 'edit'
          target: $(ORIGAM_SOURCE_COMMIT_ID)
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG)'

@@ -413,8 +413,8 @@ jobs:
        inputs:
          containerRegistry: dockerhub
          repository: origam/server
-         Dockerfile: '$(Agent.BuildDirectory)/s/origam-source/OrigamDocker/Dockerfile'
-         buildContext: '$(Agent.BuildDirectory)/s/origam-source/OrigamDocker'
+         Dockerfile: '$(Agent.BuildDirectory)/s/OrigamDocker/Dockerfile'
+         buildContext: '$(Agent.BuildDirectory)/s/OrigamDocker'
          tags: |
            $(BRANCH)-latest
            $(BRANCH)-$(OrigamBuildNumber)

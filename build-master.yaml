@@ -29,6 +29,8 @@ variables:
   value: $(Pipeline.Workspace)/.nuget/packages
 - name: YARN_CACHE_FOLDER # location of yarn cache
   value: $(Pipeline.Workspace)/.yarn
+- name: ORIGAM_SOURCE_COMMIT_ID # needed for release step
+  value: $[resources.repositories['origam-source'].ref]
 - name: BRANCH # branch to be used
   value: master
 - name: VERSION_NUMBER # version number of the build
@@ -44,7 +46,7 @@ jobs:
       vmImage: windows-2019
     steps:
      - script: |
-         echo "origam-source commit - $[resources.repositories['origam-source'].ref]"
+         echo "origam-source commit - $(ORIGAM_SOURCE_COMMIT_ID)"
      - checkout: origam-source
        fetchDepth: 1
        persistCredentials: true

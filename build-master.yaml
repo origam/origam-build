@@ -363,13 +363,13 @@ jobs:
          ArtifactName: origam-html
        condition: succeededOrFailed()
      - script: |
-        git tag $(TAG)
-        git push origin $(TAG)
+        git -f -a tag $(TAG)
+        git push -f origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-source
        displayName: 'Tag origam-source with $(TAG)'
      - script: |
-        git tag $(TAG)
-        git push origin $(TAG)
+        git -f -a tag $(TAG)
+        git push -f origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html
        displayName: 'Tag origam-html with $(TAG)'
      - powershell: |

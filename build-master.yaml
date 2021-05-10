@@ -47,7 +47,7 @@ jobs:
        fetchDepth: 1
        persistCredentials: true
      - script: |
-        git tag -f -a $(TAG)
+        git tag -f $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-source
        displayName: 'Tag origam-source with $(TAG)'
      - script: |
@@ -379,16 +379,12 @@ jobs:
        displayName: Delete previous GitHub release
        continueOnError: true
      - script: |
-        git config --global user.email "petr.hrehorovsky@gmail.com"
-        git config --global user.name "washibana"
-        git tag -f -a $(TAG)
+        git tag -f $(TAG)
         git push -f origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-source
        displayName: 'Tag origam-source with $(TAG)'
      - script: |
-        git config --global user.email "petr.hrehorovsky@gmail.com"
-        git config --global user.name "washibana"
-        git tag -f -a $(TAG)
+        git tag -f $(TAG)
         git push -f origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html
        displayName: 'Tag origam-html with $(TAG)'

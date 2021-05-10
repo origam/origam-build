@@ -46,12 +46,6 @@ jobs:
      - checkout: origam-source
        fetchDepth: 1
        persistCredentials: true
-     - powershell: |
-         $commitId = (git -C $(Agent.BuildDirectory)\s\origam-source rev-parse HEAD)
-         Write-Host $commitId
-         Write-Host "##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID;]$commitId"
-       displayName: Store origam-source commit id
-     - powershell: Write-Host $($env:ORIGAM_SOURCE_COMMIT_ID)
      - checkout: origam-html
        fetchDepth: 1
        persistCredentials: true
@@ -59,6 +53,11 @@ jobs:
        fetchDepth: 1
      - checkout: origam-html-chat
        fetchDepth: 1
+     - powershell: |
+         $commitId = (git -C $(Agent.BuildDirectory)\s\origam-source rev-parse HEAD)
+         Write-Host $commitId
+         Write-Host "##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID;]$commitId"
+       displayName: Store origam-source commit id
      - task: NuGetToolInstaller@0
        displayName: 'Use NuGet 5.8'
        inputs:
@@ -382,7 +381,7 @@ jobs:
          tag: '$(TAG)'
          title: '$(TAG)'
          releaseNotesSource: 'inline'
-         releaseNotesInline: 'Latest master build.'
+         releaseNotesInline: 'The latest master build.'
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model/*
            $(Build.ArtifactStagingDirectory)/origam-html/*

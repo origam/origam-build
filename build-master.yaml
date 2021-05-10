@@ -1,18 +1,5 @@
 name: $(Build.BuildId)
 
-
-variables:
-- name: NUGET_PACKAGES # location of nuget packages (used by cache)
-  value: $(Pipeline.Workspace)/.nuget/packages
-- name: YARN_CACHE_FOLDER # location of yarn cache
-  value: $(Pipeline.Workspace)/.yarn
-- name: BRANCH # branch to be used
-  value: master
-- name: VERSION_NUMBER # version number of the build
-  value: 0.0.1.$(Build.BuildId)
-- name: TAG # tag to be used
-  value: master-latest
-
 resources:
   repositories:
    - repository: origam-source
@@ -37,12 +24,27 @@ resources:
      ref: $(BRANCH)
 
 
+variables:
+- name: NUGET_PACKAGES # location of nuget packages (used by cache)
+  value: $(Pipeline.Workspace)/.nuget/packages
+- name: YARN_CACHE_FOLDER # location of yarn cache
+  value: $(Pipeline.Workspace)/.yarn
+- name: BRANCH # branch to be used
+  value: master
+- name: VERSION_NUMBER # version number of the build
+  value: 0.0.1.$(Build.BuildId)
+- name: TAG # tag to be used
+  value: master-latest
+
+
 jobs:
   - job: BuildOrigam
     displayName: Build Origam
     pool:
       vmImage: windows-2019
     steps:
+     - script: |
+         echo "origam-source commit - $[resources.repositories['origam-source'].ref]"
      - checkout: origam-source
        fetchDepth: 1
        persistCredentials: true
@@ -371,7 +373,7 @@ jobs:
          gitHubConnection: 'https://github.com/origam/'
          repositoryName: 'origam/origam-source'
          action: 'create'
-         target: '$(Build.SourceVersion)'
+         target: $[resources.repositories['origam-source'].ref]
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG)'
          title: '$(TAG)'

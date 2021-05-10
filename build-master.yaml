@@ -48,6 +48,9 @@ jobs:
        persistCredentials: true
      - script: |
         git tag -f -a $(TAG)
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-source
+       displayName: 'Tag origam-source with $(TAG)'
+     - script: |
         git push -f origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-source
        displayName: 'Tag origam-source with $(TAG)'

@@ -50,7 +50,7 @@ jobs:
          $commitId = (git -C $(Agent.BuildDirectory)\s\origam-source rev-parse HEAD)
          Write-Host $commitId
          Write-Host '##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID]$commitId'
-     - script: echo "$($env:ORIGAM_SOURCE_COMMIT_ID)"
+     - powershell: Write-Host $($env:ORIGAM_SOURCE_COMMIT_ID)
      - checkout: origam-html
        fetchDepth: 1
        persistCredentials: true

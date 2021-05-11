@@ -38,56 +38,25 @@ variables:
 
 
 jobs:
-  - job: BuildOrigam
-    displayName: Build Origam
+  - job: build-source
+    displayName: Build source
     pool:
       vmImage: windows-2019
     steps:
      - checkout: origam-source
        fetchDepth: 1
-       persistCredentials: true
-     - script: |
-        git tag -f $(TAG)
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-source
-       displayName: 'Tag origam-source with $(TAG)'
-     - script: |
-        git push -f origin $(TAG)
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-source
-       displayName: 'Tag origam-source with $(TAG)'
-     - checkout: origam-html
-       fetchDepth: 1
-       persistCredentials: true
      - checkout: origam-model
        fetchDepth: 1
-     - checkout: origam-html-chat
-       fetchDepth: 1
-     - powershell: |
-         $commitId = (git -C $(Agent.BuildDirectory)\s\origam-source rev-parse HEAD)
-         Write-Host $commitId
-         Write-Host "##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID;]$commitId"
-       displayName: Store origam-source commit id
      - task: NuGetToolInstaller@0
        displayName: 'Use NuGet 5.8'
        inputs:
          versionSpec: 5.8
-     - task: NodeTool@0
-       displayName: 'Use Node 11.x'
-       inputs:
-         versionSpec: 11.x
-     - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
-       displayName: 'Use Yarn 1.x'
      - task: Cache@2
        displayName: 'NuGet Cache'
        inputs:
          key: 'nuget-2021-04-11-01 | "$(Agent.OS)" | $(Agent.BuildDirectory)/s/origam-source/**/*.sln,!$(Agent.BuildDirectory)/s/origam-source/**/bin/**'
          path: '$(NUGET_PACKAGES)'
          restoreKeys: 'nuget-2021-04-11-01 | "$(Agent.OS)"'
-     - task: Cache@2
-       displayName: 'Yarn Cache'
-       inputs:
-         key: 'yarn-2021-04-08-01 | "$(Agent.OS)" | $(Agent.BuildDirectory)/s/origam-html/yarn.lock,$(Agent.BuildDirectory)/s/origam-html-chat/yarn.lock'
-         path: '$(YARN_CACHE_FOLDER)'
-         restoreKeys: 'yarn-2021-04-08-01 | "$(Agent.OS)"'
      - task: NuGetCommand@2
        displayName: 'NuGet restore'
        inputs:
@@ -102,14 +71,14 @@ jobs:
         (Get-Content "$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\Controller\AboutController.cs") -replace "Placeholder to be changed at build time", "$(VERSION_NUMBER)" | Set-Content "$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\Controller\AboutController.cs"
        displayName: 'Build Number'
      - task: VSBuild@1
-       displayName: 'Build Architect'
+       displayName: 'Build architect'
        inputs:
          solution: '$(Agent.BuildDirectory)/s/origam-source/**/*.sln'
          platform: 'Any CPU'
          configuration: 'Release Architect'
          msbuildArchitecture: 'x64'
      - task: VSTest@2
-       displayName: 'Run Tests'
+       displayName: 'Run tests'
        inputs:
          testSelector: 'testAssemblies'
          testAssemblyVer2: |
@@ -128,7 +97,7 @@ jobs:
          TargetFolder: '$(build.artifactstagingdirectory)\origam-architect'
        condition: succeededOrFailed()
      - task: CopyFiles@2
-       displayName: 'Copy Architect to: $(build.artifactstagingdirectory)\origam-architect'
+       displayName: 'Copy architect to: $(build.artifactstagingdirectory)\origam-architect'
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamArchitect\bin\Release\'
          Contents: |
@@ -138,7 +107,7 @@ jobs:
          TargetFolder: '$(build.artifactstagingdirectory)\origam-architect'
        condition: succeededOrFailed()
      - task: CopyFiles@2
-       displayName: 'Copy External Architect Dlls to: $(build.artifactstagingdirectory)\origam-architect'
+       displayName: 'Copy external architect dlls to: $(build.artifactstagingdirectory)\origam-architect'
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\'
          Contents: 'EnterpriseLibrary\Interop.MSCommLib.dll'
@@ -146,7 +115,7 @@ jobs:
          flattenFolders: true
        condition: succeededOrFailed()
      - task: PublishBuildArtifacts@1
-       displayName: 'Publish Artifact: origam-architect'
+       displayName: 'Publish artifact: origam-architect'
        inputs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-architect'
          ArtifactName: origam-architect
@@ -169,7 +138,7 @@ jobs:
          TargetFolder: '$(build.artifactstagingdirectory)\origam-client'
        condition: succeededOrFailed()
      - task: CopyFiles@2
-       displayName: 'Copy Client to: $(build.artifactstagingdirectory)\origam-client'
+       displayName: 'Copy client to: $(build.artifactstagingdirectory)\origam-client'
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamArchitect\bin\Release\'
          Contents: |
@@ -179,7 +148,7 @@ jobs:
          TargetFolder: '$(build.artifactstagingdirectory)\origam-client'
        condition: succeededOrFailed()
      - task: PublishBuildArtifacts@1
-       displayName: 'Publish Artifact: origam-client'
+       displayName: 'Publish artifact: origam-client'
        inputs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-client'
          ArtifactName: origam-client
@@ -192,7 +161,7 @@ jobs:
          RemoveSourceFolder: true
        displayName: 'origam-client clean up'
      - task: VSBuild@1
-       displayName: 'Build Server'
+       displayName: 'Build server'
        inputs:
          solution: '$(Agent.BuildDirectory)/s/origam-source/**/*.sln'
          platform: 'Any CPU'
@@ -205,7 +174,7 @@ jobs:
          msbuildArchitecture: x64
          configuration: 'Release Server'
      - task: CopyFiles@2
-       displayName: 'Copy Server Dlls to: $(build.artifactstagingdirectory)\origam-web\bin'
+       displayName: 'Copy server dlls to: $(build.artifactstagingdirectory)\origam-web\bin'
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\Origam.Server\bin\Release\'
          Contents: |
@@ -218,7 +187,7 @@ jobs:
          TargetFolder: '$(build.artifactstagingdirectory)\origam-web\bin'
        condition: succeededOrFailed()
      - task: CopyFiles@2
-       displayName: 'Copy External Dlls to: $(build.artifactstagingdirectory)\origam-web\bin'
+       displayName: 'Copy external dlls to: $(build.artifactstagingdirectory)\origam-web\bin'
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\'
          Contents: |
@@ -231,7 +200,7 @@ jobs:
          flattenFolders: true
        condition: succeededOrFailed()
      - task: CopyFiles@2
-       displayName: 'Copy Web Files to: $(build.artifactstagingdirectory)\origam-web'
+       displayName: 'Copy web files to: $(build.artifactstagingdirectory)\origam-web'
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\web'
          Contents: |
@@ -264,7 +233,7 @@ jobs:
         $config|Set-Content $(build.artifactstagingdirectory)\origam-web\portal.config
        displayName: 'Copy Flash UI'
      - task: PublishBuildArtifacts@1
-       displayName: 'Publish Artifact: origam-web'
+       displayName: 'Publish artifact: origam-web'
        inputs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-web'
          ArtifactName: origam-web
@@ -280,16 +249,16 @@ jobs:
         xcopy model_template $(build.artifactstagingdirectory)\origam-model /i /e /y
         xcopy $(build.artifactstagingdirectory)\origam-architect $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\source /i /e /y
         xcopy $(build.artifactstagingdirectory)\origam-web $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\server_source /i /e /y
-       displayName: 'Prepare Sources for Setup (Model)'
+       displayName: 'Prepare sources for setup (model)'
      - powershell: |
         & "$(WIX)bin\candle.exe" -ext WixSqlExtension -ext WixUtilExtension ArchitectSetup.wxs
         & "$(WIX)bin\light.exe" -ext WixSqlExtension -ext WixUtilExtension -ext WixNetFxExtension -sice:ICE20 -cultures:en-us -loc resources.en-us.wxl -out OrigamSetup.msi ArchitectSetup.wixobj
         New-Item -ItemType File -Path $(build.artifactstagingdirectory)\origam-setup\OrigamSetup.msi -Force
         Copy-Item OrigamSetup.msi $(build.artifactstagingdirectory)\origam-setup\OrigamSetup.msi -Force
        workingDirectory: $(Agent.BuildDirectory)\s\origam-source\OrigamSetup
-       displayName: 'Build Setup'
+       displayName: 'Build setup'
      - task: PublishBuildArtifacts@1
-       displayName: 'Publish Artifact: origam-setup'
+       displayName: 'Publish artifact: origam-setup'
        inputs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-setup'
          ArtifactName: origam-setup
@@ -322,7 +291,7 @@ jobs:
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\origam-source\Origam.sln /p:Configuration="Release Server" /t:Server\Origam_ServerCore:Publish -v:m
        displayName: 'Build HTML Server'
      - task: CopyFiles@2
-       displayName: 'Copy HTML Server to: $(build.artifactstagingdirectory)\origam-html'
+       displayName: 'Copy HTML server to: $(build.artifactstagingdirectory)\origam-html'
        inputs:
          SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\bin\Release\net5.0\publish\'
          Contents: |
@@ -330,14 +299,33 @@ jobs:
            !*.config
          TargetFolder: '$(build.artifactstagingdirectory)\origam-html'
        condition: succeededOrFailed()
-     - task: DeleteFiles@1
+     - task: PublishBuildArtifacts@1
+       displayName: 'Publish artifact: origam-html-server'
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\'
-         Contents: |
-           **/bin/*
-           **/obj/*
-         RemoveSourceFolder: false
-       displayName: 'Complete origam-source clean up'
+         PathtoPublish: '$(build.artifactstagingdirectory)\origam-setup'
+         ArtifactName: origam-setup
+       condition: succeededOrFailed()
+  - job: build-html
+    displayName: Build html
+    pool:
+      vmImage: windows-2019
+    steps:
+     - checkout: origam-html
+       fetchDepth: 1
+     - checkout: origam-html-chat
+       fetchDepth: 1
+     - task: NodeTool@0
+       displayName: 'Use Node 11.x'
+       inputs:
+         versionSpec: 11.x
+     - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
+       displayName: 'Use Yarn 1.x'
+     - task: Cache@2
+       displayName: 'Yarn Cache'
+       inputs:
+         key: 'yarn-2021-04-08-01 | "$(Agent.OS)" | $(Agent.BuildDirectory)/s/origam-html/yarn.lock,$(Agent.BuildDirectory)/s/origam-html-chat/yarn.lock'
+         path: '$(YARN_CACHE_FOLDER)'
+         restoreKeys: 'yarn-2021-04-08-01 | "$(Agent.OS)"'
      - script: |
         yarn --frozen-lockfile
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html\
@@ -346,11 +334,12 @@ jobs:
         yarn build
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html\
        displayName: 'origam-html yarn build'
-     - task: CopyFiles@2
-       displayName: 'HTML Client to: $(build.artifactstagingdirectory)\origam-html'
+     - task: PublishBuildArtifacts@1
+       displayName: 'Publish artifact: origam-html-client'
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-html\build'
-         TargetFolder: '$(build.artifactstagingdirectory)\origam-html\clients\origam'
+         PathtoPublish: '$(Agent.BuildDirectory)\s\origam-html\build'
+         ArtifactName: origam-html-client
+       condition: succeededOrFailed()
      - script: |
         yarn --frozen-lockfile
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\client
@@ -359,17 +348,37 @@ jobs:
         yarn build
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat\client
        displayName: 'origam-html-chat yarn build'
-     - task: CopyFiles@2
-       displayName: 'HTML Chat to: $(build.artifactstagingdirectory)\origam-html'
-       inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-html-chat\client\build'
-         TargetFolder: '$(build.artifactstagingdirectory)\origam-html\clients\chat'
      - task: PublishBuildArtifacts@1
-       displayName: 'Publish Artifact: origam-html'
+       displayName: 'Publish artifact: origam-html-chat'
        inputs:
-         PathtoPublish: '$(build.artifactstagingdirectory)\origam-html'
-         ArtifactName: origam-html
+         PathtoPublish: '$(Agent.BuildDirectory)\s\origam-html-chat\client\build'
+         ArtifactName: origam-html-chat
        condition: succeededOrFailed()
+  - job: build-release
+    displayName: Build release
+    dependsOn: 
+    - build-source
+    - build-html
+    pool:
+      vmImage: windows-2019
+    steps:
+     - checkout: origam-source
+       fetchDepth: 1
+       persistCredentials: true
+     - checkout: origam-html
+       fetchDepth: 1
+       persistCredentials: true
+     - checkout: origam-model
+       fetchDepth: 1
+       persistCredentials: true
+     - checkout: origam-html-chat
+       fetchDepth: 1
+       persistCredentials: true
+     - powershell: |
+         $commitId = (git -C $(Agent.BuildDirectory)\s\origam-source rev-parse HEAD)
+         Write-Host $commitId
+         Write-Host "##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID;]$commitId"
+       displayName: Store origam-source commit id
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
@@ -388,6 +397,16 @@ jobs:
         git push -f origin $(TAG)
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html
        displayName: 'Tag origam-html with $(TAG)'
+     - script: |
+        git tag -f $(TAG)
+        git push -f origin $(TAG)
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat
+       displayName: 'Tag origam-html-chat with $(TAG)'
+     - script: |
+        git tag -f $(TAG)
+        git push -f origin $(TAG)
+       workingDirectory: $(Agent.BuildDirectory)\s\origam-model
+       displayName: 'Tag origam-model with $(TAG)'
      - powershell: |
         & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Build.ArtifactStagingDirectory)\origam-html", "$(build.artifactstagingdirectory)\origam-html.zip"); }
         & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Agent.BuildDirectory)\s\origam-model", "$(build.artifactstagingdirectory)\origam-model.zip"); }
@@ -409,7 +428,7 @@ jobs:
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
          addChangeLog: false
        displayName: Create new GitHub release
-  - job: BuildDocker
+  - job: build-docker
     displayName: Build Docker
     dependsOn: BuildOrigam
     pool:

@@ -302,8 +302,8 @@ jobs:
      - task: PublishBuildArtifacts@1
        displayName: 'Publish artifact: origam-html-server'
        inputs:
-         PathtoPublish: '$(build.artifactstagingdirectory)\origam-setup'
-         ArtifactName: origam-setup
+         PathtoPublish: '$(build.artifactstagingdirectory)\origam-html'
+         ArtifactName: origam-html-server
        condition: succeededOrFailed()
   - job: build_html
     displayName: Build html
@@ -379,6 +379,34 @@ jobs:
          Write-Host $commitId
          Write-Host "##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID;]$commitId"
        displayName: Store origam-source commit id
+    - task: DownloadBuildArtifacts@0
+      displayName: Download origam-setup artifact
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'origam-setup'
+        downloadPath: '$(build.artifactstagingdirectory)'
+     - task: DownloadBuildArtifacts@0
+       displayName: Download origam-html-server artifact
+       inputs:
+         buildType: 'current'
+         downloadType: 'single'
+         artifactName: 'origam-html-server'
+         downloadPath: '$(build.artifactstagingdirectory)'
+     - task: DownloadBuildArtifacts@0
+       displayName: Download origam-html-client artifact
+       inputs:
+         buildType: 'current'
+         downloadType: 'single'
+         artifactName: 'origam-html-client'
+         downloadPath: '$(build.artifactstagingdirectory)'
+     - task: DownloadBuildArtifacts@0
+       displayName: Download origam-html-chat artifact
+       inputs:
+         buildType: 'current'
+         downloadType: 'single'
+         artifactName: 'origam-html-chat'
+         downloadPath: '$(build.artifactstagingdirectory)'
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'

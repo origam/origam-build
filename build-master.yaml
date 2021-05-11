@@ -38,7 +38,7 @@ variables:
 
 
 jobs:
-  - job: build-source
+  - job: build_source
     displayName: Build source
     pool:
       vmImage: windows-2019
@@ -305,7 +305,7 @@ jobs:
          PathtoPublish: '$(build.artifactstagingdirectory)\origam-setup'
          ArtifactName: origam-setup
        condition: succeededOrFailed()
-  - job: build-html
+  - job: build_html
     displayName: Build html
     pool:
       vmImage: windows-2019
@@ -354,11 +354,11 @@ jobs:
          PathtoPublish: '$(Agent.BuildDirectory)\s\origam-html-chat\client\build'
          ArtifactName: origam-html-chat
        condition: succeededOrFailed()
-  - job: build-release
+  - job: build_release
     displayName: Build release
     dependsOn: 
-    - build-source
-    - build-html
+    - build_source
+    - build_html
     pool:
       vmImage: windows-2019
     steps:
@@ -428,9 +428,9 @@ jobs:
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
          addChangeLog: false
        displayName: Create new GitHub release
-  - job: build-docker
+  - job: build_docker
     displayName: Build Docker
-    dependsOn: BuildOrigam
+    dependsOn: build_release
     pool:
       vmImage: ubuntu-16.04
     steps:

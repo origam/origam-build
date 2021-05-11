@@ -487,9 +487,10 @@ jobs:
          buildType: 'current'
          downloadType: 'single'
          artifactName: 'origam-html'
-         downloadPath: '$(Agent.BuildDirectory)/s/OrigamDocker/HTML5'
+         downloadPath: '$(Agent.BuildDirectory)/s/OrigamDocker'
      - bash: |
         origamBuildNumber=$(($(Build.BuildId) + 5300))
+        mv origam-html HTML5
         echo "##vso[task.setvariable variable=OrigamBuildNumber;]$origamBuildNumber"
        workingDirectory: '$(Agent.BuildDirectory)/s/OrigamDocker'
        displayName: Download origam-html artifact

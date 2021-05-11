@@ -379,13 +379,13 @@ jobs:
          Write-Host $commitId
          Write-Host "##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID;]$commitId"
        displayName: Store origam-source commit id
-    - task: DownloadBuildArtifacts@0
-      displayName: Download origam-setup artifact
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'origam-setup'
-        downloadPath: '$(build.artifactstagingdirectory)'
+     - task: DownloadBuildArtifacts@0
+       displayName: Download origam-setup artifact
+       inputs:
+         buildType: 'current'
+         downloadType: 'single'
+         artifactName: 'origam-setup'
+         downloadPath: '$(build.artifactstagingdirectory)'
      - task: DownloadBuildArtifacts@0
        displayName: Download origam-html-server artifact
        inputs:

@@ -407,6 +407,18 @@ jobs:
          downloadType: 'single'
          artifactName: 'origam-html-chat'
          downloadPath: '$(build.artifactstagingdirectory)'
+     - task: CopyFiles@2
+       displayName: Copy origam-html-client to origam-html-server
+       inputs:
+         SourceFolder: '$(build.artifactstagingdirectory)\origam-html-client'
+         Contents: '**'
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-html-server\clients\origam'
+     - task: CopyFiles@2
+       displayName: Copy origam-html-chat to origam-html-server
+       inputs:
+         SourceFolder: '$(build.artifactstagingdirectory)\origam-html-chat'
+         Contents: '**'
+         TargetFolder: '$(build.artifactstagingdirectory)\origam-html-server\clients\chat'
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
@@ -436,7 +448,7 @@ jobs:
        workingDirectory: $(Agent.BuildDirectory)\s\origam-model
        displayName: 'Tag origam-model with $(TAG)'
      - powershell: |
-        & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Build.ArtifactStagingDirectory)\origam-html", "$(build.artifactstagingdirectory)\origam-html.zip"); }
+        & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Build.ArtifactStagingDirectory)\origam-html-server", "$(build.artifactstagingdirectory)\origam-html.zip"); }
         & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Agent.BuildDirectory)\s\origam-model", "$(build.artifactstagingdirectory)\origam-model.zip"); }
        displayName: Zip files for release
      - task: GitHubRelease@1

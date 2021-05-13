@@ -1,5 +1,21 @@
 name: $(Build.BuildId)
 
+
+variables:
+- name: NUGET_PACKAGES # location of nuget packages (used by cache)
+  value: $(Pipeline.Workspace)/.nuget/packages
+- name: YARN_CACHE_FOLDER # location of yarn cache
+  value: $(Pipeline.Workspace)/.yarn
+- name: BRANCH # branch to be used
+  value: master
+- name: VERSION_NUMBER # version number of the build
+  value: 2021.2.0.$(Build.BuildId)
+- name: TAG # tag to be used
+  value: 2021.2.beta1
+- name: TAG_LATEST # tag to be used
+  value: 2021.2-latest
+
+
 resources:
   repositories:
    - repository: origam-source
@@ -22,21 +38,6 @@ resources:
      endpoint: https://github.com/origam/
      name: origam/origam-html-chat
      ref: $(BRANCH)
-
-
-variables:
-- name: NUGET_PACKAGES # location of nuget packages (used by cache)
-  value: $(Pipeline.Workspace)/.nuget/packages
-- name: YARN_CACHE_FOLDER # location of yarn cache
-  value: $(Pipeline.Workspace)/.yarn
-- name: BRANCH # branch to be used
-  value: master
-- name: VERSION_NUMBER # version number of the build
-  value: 2021.2.$(Build.BuildId).0
-- name: TAG # tag to be used
-  value: 2021.2.beta1
-- name: TAG_LATEST # tag to be used
-  value: 2021.2-latest
 
 
 jobs:

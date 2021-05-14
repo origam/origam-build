@@ -561,18 +561,7 @@ jobs:
            ```
            docker pull origam/server:$(TAG).$(Build.BuildId)
            ```
-           <details>
-           <summary>Links to related repositories</summary>
-           <br />
-           HTML Client <a href="https://github.com/origam/origam-html/releases/tag/$(TAG)">🏷$(TAG)</a>
-           <br />
-           HTML Chat <a href="https://github.com/origam/origam-html-chat/releases/tag/$(TAG)">🏷$(TAG)</a>
-           <br />
-           Root Model <a href="https://github.com/origam/origam-model/releases/tag/$(TAG)">🏷$(TAG)</a>
-           </details>
-           <details>
-           <summary>Change log</summary>
-           <br />
+           Related change logs: [HTML Client](https://github.com/origam/origam-html/releases/tag/$(TAG)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG)) | [Root Model](https://github.com/origam/origam-model/releases/tag/$(TAG))
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip
@@ -604,18 +593,7 @@ jobs:
            ```
            docker pull origam/server:$(TAG_LATEST)
            ```
-           <details>
-           <summary>Links to related repositories</summary>
-           <br />
-           HTML Client <a href="https://github.com/origam/origam-html/releases/tag/$(TAG_LATEST)">🏷$(TAG_LATEST)</a>
-           <br />
-           HTML Chat <a href="https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST)">🏷$(TAG_LATEST)</a>
-           <br />
-           Root Model <a href="https://github.com/origam/origam-model/releases/tag/$(TAG_LATEST)">🏷$(TAG_LATEST)</a>
-           </details>
-           <details>
-           <summary>Change log</summary>
-           <br />
+           Related change logs: [HTML Client](https://github.com/origam/origam-html/releases/tag/$(TAG_LATEST)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST)) | [Root Model](https://github.com/origam/origam-model/releases/tag/$(TAG_LATEST))
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip
@@ -647,7 +625,7 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(TAG) build. Version $(VERSION_NUMBER).
-           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/🏷$(TAG)</a>
+           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG)</a>
          addChangeLog: true
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'
@@ -668,7 +646,7 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(BRANCH) build. Version $(VERSION_NUMBER).
-           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/🏷$(TAG_LATEST)</a>
+           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG_LATEST)</a>
          addChangeLog: true
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'
@@ -689,7 +667,7 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(TAG) build. Version $(VERSION_NUMBER).
-           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/🏷$(TAG)</a>
+           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG)</a>
          addChangeLog: true
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'
@@ -710,7 +688,7 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(BRANCH) build. Version $(VERSION_NUMBER).
-           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/🏷$(TAG_LATEST)</a>
+           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG_LATEST)</a>
          addChangeLog: true
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'
@@ -731,7 +709,7 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(TAG) build. Version $(VERSION_NUMBER).
-           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/🏷$(TAG)</a>
+           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG)</a>
          addChangeLog: true
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'
@@ -752,7 +730,7 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(BRANCH) build. Version $(VERSION_NUMBER).
-           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/🏷$(TAG_LATEST)</a>
+           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG_LATEST)</a>
          addChangeLog: true
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'

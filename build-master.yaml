@@ -448,25 +448,25 @@ jobs:
      - script: |
         git tag -f $(TAG)
         git tag -f $(TAG_LATEST)
-        git push -f origin $(TAG)
+        git push -f origin --tags
        workingDirectory: $(Agent.BuildDirectory)\s\origam-source
        displayName: 'Tag origam-source'
      - script: |
         git tag -f $(TAG)
         git tag -f $(TAG_LATEST)
-        git push -f origin $(TAG)
+        git push -f origin --tags
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html
        displayName: 'Tag origam-html'
      - script: |
         git tag -f $(TAG)
         git tag -f $(TAG_LATEST)
-        git push -f origin $(TAG)
+        git push -f origin --tags
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat
        displayName: 'Tag origam-html-chat'
      - script: |
         git tag -f $(TAG)
         git tag -f $(TAG_LATEST)
-        git push -f origin $(TAG)
+        git push -f origin --tags
        workingDirectory: $(Agent.BuildDirectory)\s\origam-model
        displayName: 'Tag origam-model'
      - powershell: |

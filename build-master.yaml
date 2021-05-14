@@ -11,9 +11,11 @@ variables:
 - name: VERSION_NUMBER # version number of the build
   value: 2021.2.0.$(Build.BuildId)
 - name: TAG # tag to be used
-  value: 2021.2.beta1
+  value: 2021.2-beta.1
 - name: TAG_LATEST # tag to be used
-  value: 2021.2-latest
+  value: master-latest
+- name: IS_PRERELASE
+  value: true
 
 
 resources:
@@ -480,6 +482,7 @@ jobs:
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG)'
          title: '$(TAG)'
+         isPreRelease: $(IS_PRERELASE)
          releaseNotesSource: 'inline'
          releaseNotesInline: '$(VERSION_NUMBER)'
          assets: |
@@ -497,6 +500,7 @@ jobs:
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG_LATEST)'
          title: '$(TAG_LATEST)'
+         isPreRelease: $(IS_PRERELASE)
          releaseNotesSource: 'inline'
          releaseNotesInline: 'The latest $(BRANCH) build. Version $(VERSION_NUMBER).'
          assets: |

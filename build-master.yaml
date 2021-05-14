@@ -14,6 +14,8 @@ variables:
   value: 2021.2-beta.1
 - name: TAG_LATEST # tag to be used
   value: master-latest
+- name: TAG_PREVIOUS # tag to compare changelog to
+  value: 2021.1.0
 - name: IS_PRERELASE
   value: true
 
@@ -486,15 +488,32 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(TAG) build. Version $(VERSION_NUMBER).
-           # Links to other repositories
-           HTML Client [🏷$(TAG)](https://github.com/origam/origam-html/releases/tag/$(TAG))
-           HTML Chat [🏷$(TAG)](https://github.com/origam/origam-html-chat/releases/tag/$(TAG))
-           Root Model [🏷$(TAG)](https://github.com/origam/origam-model/releases/tag/$(TAG))
+           
+           ---
+           
+           Docker image
+           ```
+           docker pull origam/server:$(TAG).$(Build.BuildId)
+           ```
+           <details>
+           <summary>Links to related repositories</summary>
+           <br />
+           HTML Client <a href="https://github.com/origam/origam-html/releases/tag/$(TAG)">🏷$(TAG)</a>
+           <br />
+           HTML Chat <a href="https://github.com/origam/origam-html-chat/releases/tag/$(TAG)">🏷$(TAG)</a>
+           <br />
+           Root Model <a href="https://github.com/origam/origam-model/releases/tag/$(TAG)">🏷$(TAG)</a>
+           </details>
+           <details>
+           <summary>Change log</summary>
+           <br />
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
-         addChangeLog: false
+         addChangeLog: true
+         compareWith: 'lastReleaseByTag'
+         releaseTag: '$(TAG_PREVIOUS)'
        displayName: Create new GitHub $(TAG) release
      - task: GitHubRelease@1
        inputs:
@@ -509,15 +528,32 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(BRANCH) build. Version $(VERSION_NUMBER).
-           # Links to other repositories
-           HTML Client [🏷$(TAG_LATEST)](https://github.com/origam/origam-html/releases/tag/$(TAG_LATEST))
-           HTML Chat [🏷$(TAG_LATEST)](https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST))
-           Root Model [🏷$(TAG_LATEST)](https://github.com/origam/origam-model/releases/tag/$(TAG_LATEST))
+           
+           ---
+           
+           Docker image
+           ```
+           docker pull origam/server:$(TAG_LATEST)
+           ```
+           <details>
+           <summary>Links to related repositories</summary>
+           <br />
+           HTML Client <a href="https://github.com/origam/origam-html/releases/tag/$(TAG_LATEST)">🏷$(TAG_LATEST)</a>
+           <br />
+           HTML Chat <a href="https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST)">🏷$(TAG_LATEST)</a>
+           <br />
+           Root Model <a href="https://github.com/origam/origam-model/releases/tag/$(TAG_LATEST)">🏷$(TAG_LATEST)</a>
+           </details>
+           <details>
+           <summary>Change log</summary>
+           <br />
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
-         addChangeLog: false
+         addChangeLog: true
+         compareWith: 'lastReleaseByTag'
+         releaseTag: '$(TAG_PREVIOUS)'
        displayName: Create new GitHub $(TAG_LATEST) release
   - job: build_docker
     displayName: Build Docker

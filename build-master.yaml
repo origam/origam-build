@@ -646,7 +646,7 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(BRANCH) build. Version $(VERSION_NUMBER).
-           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG_LATEST)</a>
+           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG_LATEST)">origam-source/$(TAG_LATEST)</a>
          addChangeLog: true
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'
@@ -688,7 +688,7 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(BRANCH) build. Version $(VERSION_NUMBER).
-           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG_LATEST)</a>
+           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG_LATEST)">origam-source/$(TAG_LATEST)</a>
          addChangeLog: true
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'
@@ -730,7 +730,7 @@ jobs:
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(BRANCH) build. Version $(VERSION_NUMBER).
-           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG_LATEST)</a>
+           Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG_LATEST)">origam-source/$(TAG_LATEST)</a>
          addChangeLog: true
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'

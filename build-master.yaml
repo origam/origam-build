@@ -624,6 +624,13 @@ jobs:
          compareWith: 'lastReleaseByTag'
          releaseTag: '$(TAG_PREVIOUS)'
        displayName: Create new GitHub $(TAG_LATEST) release
+     - task: DeleteFiles@1
+       inputs:
+         SourceFolder: '$(Build.ArtifactStagingDirectory)'
+         Contents: |
+           **\*.*
+         RemoveSourceFolder: false
+       displayName: 'origam-release clean up'
      # ------------------------------------
      # RELEASE ORIGAM_HTML - TAG
      # ------------------------------------

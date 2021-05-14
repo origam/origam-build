@@ -484,7 +484,12 @@ jobs:
          title: '$(TAG)'
          isPreRelease: $(IS_PRERELASE)
          releaseNotesSource: 'inline'
-         releaseNotesInline: '$(VERSION_NUMBER)'
+         releaseNotesInline: |
+           The latest $(TAG) build. Version $(VERSION_NUMBER).
+           # Links to other repositories
+           HTML Client [🏷$(TAG)](https://github.com/origam/origam-html/releases/tag/$(TAG))
+           HTML Chat [🏷$(TAG)](https://github.com/origam/origam-html-chat/releases/tag/$(TAG))
+           Root Model [🏷$(TAG)](https://github.com/origam/origam-model/releases/tag/$(TAG))
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip
@@ -502,7 +507,12 @@ jobs:
          title: '$(TAG_LATEST)'
          isPreRelease: $(IS_PRERELASE)
          releaseNotesSource: 'inline'
-         releaseNotesInline: 'The latest $(BRANCH) build. Version $(VERSION_NUMBER).'
+         releaseNotesInline: |
+           The latest $(BRANCH) build. Version $(VERSION_NUMBER).
+           # Links to other repositories
+           HTML Client [🏷$(TAG_LATEST)](https://github.com/origam/origam-html/releases/tag/$(TAG_LATEST))
+           HTML Chat [🏷$(TAG_LATEST)](https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST))
+           Root Model [🏷$(TAG_LATEST)](https://github.com/origam/origam-model/releases/tag/$(TAG_LATEST))
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip

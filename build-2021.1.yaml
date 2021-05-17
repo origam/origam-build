@@ -7,7 +7,7 @@ variables:
 - name: YARN_CACHE_FOLDER # location of yarn cache
   value: $(Pipeline.Workspace)/.yarn
 - name: BRANCH # branch to be used
-  value: master
+  value: 2021.1
 - name: VERSION_NUMBER # version number of the build
   value: 2021.1.0.$(Build.BuildId)
 - name: TAG # tag to be used

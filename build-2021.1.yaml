@@ -594,18 +594,19 @@ jobs:
          gitHubConnection: 'https://github.com/origam/'
          repositoryName: 'origam/origam-model'
          action: 'create'
-         target: $(ORIGAM_MODEL_COMMIT_ID)
+         target: '$(ORIGAM_MODEL_COMMIT_ID)'
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG)'
          title: '$(TAG)'
-         isPreRelease: $(IS_PRERELASE)
          releaseNotesSource: 'inline'
          releaseNotesInline: |
            The latest $(TAG) build. Version $(VERSION_NUMBER).
            Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG)</a>
-         addChangeLog: true
-         compareWith: 'lastReleaseByTag'
-         releaseTag: '$(TAG_PREVIOUS)'
+         assets: 
+         isPreRelease: $(IS_PRERELASE)
+         changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
+         changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
+         changeLogType: 'commitBased'
        displayName: Create new GitHub origam-model/$(TAG) release
   # ------------------------------------
   # DOCKER

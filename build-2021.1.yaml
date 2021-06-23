@@ -250,7 +250,7 @@ jobs:
          ArtifactName: origam-web
        condition: succeededOrFailed()
      - powershell: |
-        (Get-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs).replace("@product_number@", "$(PRODUCT_NUMBER)") | Set-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs
+        (Get-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs).replace("@product_version@", "$(PRODUCT_NUMBER)") | Set-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs
         (Get-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs).replace("@version@", "$(VERSION_NUMBER)") | Set-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs
         (Get-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs).replace("@branch@", "$(PRODUCT_VERSION)") | Set-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs
        displayName: 'Prepare ArchitectSetup.wxs'

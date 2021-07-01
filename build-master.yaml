@@ -493,8 +493,9 @@ jobs:
            $(Build.ArtifactStagingDirectory)/origam-html.zip
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
          addChangeLog: true
-         compareWith: 'lastReleaseByTag'
-         releaseTag: '$(TAG_PREVIOUS)'
+         changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
+         changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
+         changeLogType: 'commitBased'
        displayName: Create new GitHub $(TAG) release
      # ------------------------------------
      # RELEASE ORIGAM_SOURCE - TAG_LATEST

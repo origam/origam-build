@@ -599,8 +599,9 @@ jobs:
            The latest $(TAG) build. Version $(VERSION_NUMBER).
            Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG)</a>
          addChangeLog: true
-         compareWith: 'lastReleaseByTag'
-         releaseTag: '$(TAG_PREVIOUS)'
+         changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
+         changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
+         changeLogType: 'commitBased'
        displayName: Create new GitHub origam-html-chat/$(TAG) release
      # ------------------------------------
      # RELEASE ORIGAM_HTML_CHAT - TAG_LATEST
@@ -620,8 +621,9 @@ jobs:
            The latest $(BRANCH) build. Version $(VERSION_NUMBER).
            Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG_LATEST)">origam-source/$(TAG_LATEST)</a>
          addChangeLog: true
-         compareWith: 'lastReleaseByTag'
-         releaseTag: '$(TAG_PREVIOUS)'
+         changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
+         changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
+         changeLogType: 'commitBased'
        displayName: Create new GitHub origam-html-chat/$(TAG_LATEST) release
      # ------------------------------------
      # RELEASE ORIGAM_MODEL - TAG
@@ -641,8 +643,9 @@ jobs:
            The latest $(TAG) build. Version $(VERSION_NUMBER).
            Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG)</a>
          addChangeLog: true
-         compareWith: 'lastReleaseByTag'
-         releaseTag: '$(TAG_PREVIOUS)'
+         changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
+         changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
+         changeLogType: 'commitBased'
        displayName: Create new GitHub origam-model/$(TAG) release
      # ------------------------------------
      # RELEASE ORIGAM_HTML_CHAT - TAG_LATEST

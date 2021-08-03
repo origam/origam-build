@@ -570,7 +570,7 @@ jobs:
            The latest $(TAG) build. Version $(VERSION_NUMBER).
            Downloads at <a href="https://github.com/origam/origam-source/releases/tag/$(TAG)">origam-source/$(TAG)</a>
          assets:
-         addChangeLog: true
+         addChangeLog: false
          changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
          changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
          changeLogType: 'commitBased'

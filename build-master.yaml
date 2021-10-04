@@ -16,6 +16,8 @@ variables:
   value: 2021.2-beta.2
 - name: TAG_LATEST # tag to be used
   value: master-latest
+- name: TAG_VERSION_LATEST # tag to be used
+  value: 2021.2-latest
 - name: TAG_PREVIOUS # tag to compare changelog to
   value: 2021.2-beta.1
 - name: IS_PRERELASE
@@ -714,6 +716,7 @@ jobs:
          tags: |
            $(TAG).$(Build.BuildId)
            $(TAG_LATEST)
+           $(TAG_VERSION_LATEST)
      - task: Docker@2
        displayName: 'Build and publish docker image with Postgres'
        inputs:

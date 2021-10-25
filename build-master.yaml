@@ -150,6 +150,7 @@ jobs:
            **\*.dll
            **\*.exe
            **\*.pdb
+           **\*.exe.config
          TargetFolder: '$(build.artifactstagingdirectory)\origam-client'
        condition: succeededOrFailed()
      - task: CopyFiles@2
@@ -160,6 +161,7 @@ jobs:
            **\*.dll
            **\*.exe
            **\*.pdb
+           **\*.exe.config
          TargetFolder: '$(build.artifactstagingdirectory)\origam-client'
        condition: succeededOrFailed()
      - task: PublishBuildArtifacts@1

@@ -46,6 +46,11 @@ resources:
      endpoint: https://github.com/origam/
      name: origam/origam-html-chat
      ref: $(BRANCH)
+   - repository: monorepo
+     type: github
+     endpoint: https://github.com/origam/
+     name: origam/monorepo
+     ref: $(BRANCH)
 
 
 jobs:
@@ -54,9 +59,7 @@ jobs:
     pool:
       vmImage: windows-2019
     steps:
-     - checkout: origam-source
-       fetchDepth: 1
-     - checkout: origam-model
+     - checkout: monorepo
        fetchDepth: 1
      - task: NuGetToolInstaller@0
        displayName: 'Use NuGet 5.8'

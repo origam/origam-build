@@ -65,14 +65,14 @@ jobs:
      - task: Cache@2
        displayName: 'NuGet Cache'
        inputs:
-         key: 'nuget-2021-04-11-01 | "$(Agent.OS)" | $(Agent.BuildDirectory)/s/origam-source/**/*.sln,!$(Agent.BuildDirectory)/s/origam-source/**/bin/**'
+         key: 'nuget-2021-04-11-01 | "$(Agent.OS)" | $(Agent.BuildDirectory)/s/monorepo/backend/**/*.sln,!$(Agent.BuildDirectory)/s/monorepo/backend/**/bin/**'
          path: '$(NUGET_PACKAGES)'
          restoreKeys: 'nuget-2021-04-11-01 | "$(Agent.OS)"'
      - task: NuGetCommand@2
        displayName: 'NuGet restore'
        inputs:
          command: 'restore'
-         restoreSolution: '$(Agent.BuildDirectory)/s/origam-source/**/*.sln'
+         restoreSolution: '$(Agent.BuildDirectory)/s/monorepo/backend/**/*.sln'
          feedsToUse: 'select'
      - powershell: |
         $fileName = Get-ChildItem "*" -Include AssemblyInfo.cs -Recurse
@@ -83,12 +83,12 @@ jobs:
         $filename | %{
          (gc $_) -replace "<Version>0.0.0.0</Version>", "<Version>$(VERSION_NUMBER)</Version>" |Set-Content $_.fullname
         }
-        (Get-Content "$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\Controller\AboutController.cs") -replace "Placeholder to be changed at build time", "$(VERSION_NUMBER)" | Set-Content "$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\Controller\AboutController.cs"
+        (Get-Content "$(Agent.BuildDirectory)\s\monorepo\backend\Origam.ServerCore\Controller\AboutController.cs") -replace "Placeholder to be changed at build time", "$(VERSION_NUMBER)" | Set-Content "$(Agent.BuildDirectory)\s\monorepo\backend\Origam.ServerCore\Controller\AboutController.cs"
        displayName: 'Build Number'
      - task: VSBuild@1
        displayName: 'Build architect'
        inputs:
-         solution: '$(Agent.BuildDirectory)/s/origam-source/**/*.sln'
+         solution: '$(Agent.BuildDirectory)/s/monorepo/backend/**/*.sln'
          platform: 'Any CPU'
          configuration: 'Release Architect'
          msbuildArchitecture: 'x64'
@@ -100,11 +100,11 @@ jobs:
            **\*test*.dll
            !**\*TestAdapter.dll
            !**\obj\**
-         searchFolder: '$(Agent.BuildDirectory)\s\origam-source\'
+         searchFolder: '$(Agent.BuildDirectory)\s\monorepo\backend\'
      - task: CopyFiles@2
        displayName: 'Copy OrigamScheduler to: $(build.artifactstagingdirectory)\origam-architect'
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamScheduler\bin\Release\'
+         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\backend\OrigamScheduler\bin\Release\'
          Contents: |
            **\*.dll
            **\*.exe
@@ -114,7 +114,7 @@ jobs:
      - task: CopyFiles@2
        displayName: 'Copy architect to: $(build.artifactstagingdirectory)\origam-architect'
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamArchitect\bin\Release\'
+         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\backend\OrigamArchitect\bin\Release\'
          Contents: |
            **\*.dll
            **\*.exe
@@ -124,7 +124,7 @@ jobs:
      - task: CopyFiles@2
        displayName: 'Copy external architect dlls to: $(build.artifactstagingdirectory)\origam-architect'
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\'
+         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\backend\'
          Contents: 'EnterpriseLibrary\Interop.MSCommLib.dll'
          TargetFolder: '$(build.artifactstagingdirectory)\origam-architect'
          flattenFolders: true
@@ -138,14 +138,14 @@ jobs:
      - task: VSBuild@1
        displayName: 'Build Client'
        inputs:
-         solution: '$(Agent.BuildDirectory)/s/origam-source/**/*.sln'
+         solution: '$(Agent.BuildDirectory)/s/monorepo/backend/**/*.sln'
          platform: 'Any CPU'
          configuration: 'Release Client'
          msbuildArchitecture: 'x64'
      - task: CopyFiles@2
        displayName: 'Copy OrigamScheduler to: $(build.artifactstagingdirectory)\origam-client'
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamScheduler\bin\Release\'
+         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\backend\OrigamScheduler\bin\Release\'
          Contents: |
            **\*.dll
            **\*.exe
@@ -156,7 +156,7 @@ jobs:
      - task: CopyFiles@2
        displayName: 'Copy client to: $(build.artifactstagingdirectory)\origam-client'
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamArchitect\bin\Release\'
+         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\backend\OrigamArchitect\bin\Release\'
          Contents: |
            **\*.dll
            **\*.exe
@@ -178,22 +178,22 @@ jobs:
          RemoveSourceFolder: true
        displayName: 'origam-client clean up'
      - powershell: |
-        (Get-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs).replace("@product_version@", "$(PRODUCT_NUMBER)") | Set-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs
-        (Get-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs).replace("@branch@", "$(PRODUCT_VERSION)") | Set-Content $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\ArchitectSetup.wxs
+        (Get-Content $(Agent.BuildDirectory)\s\monorepo\backend\OrigamSetup\ArchitectSetup.wxs).replace("@product_version@", "$(PRODUCT_NUMBER)") | Set-Content $(Agent.BuildDirectory)\s\monorepo\backend\OrigamSetup\ArchitectSetup.wxs
+        (Get-Content $(Agent.BuildDirectory)\s\monorepo\backend\OrigamSetup\ArchitectSetup.wxs).replace("@branch@", "$(PRODUCT_VERSION)") | Set-Content $(Agent.BuildDirectory)\s\monorepo\backend\OrigamSetup\ArchitectSetup.wxs
        displayName: 'Prepare ArchitectSetup.wxs'
      - powershell: |
-        xcopy $(Agent.BuildDirectory)\s\origam-model\l10n model_template\l10n /i /e /y
-        xcopy $(Agent.BuildDirectory)\s\origam-model\model model_template\model /i /e /y
-        & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('model_template', '$(Agent.BuildDirectory)\s\origam-source\OrigamSetup\model_root_source\DefaultModel.zip'); }
+        xcopy $(Agent.BuildDirectory)\s\monorepo\backend\l10n model_template\l10n /i /e /y
+        xcopy $(Agent.BuildDirectory)\s\monorepo\backend\model model_template\model /i /e /y
+        & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('model_template', '$(Agent.BuildDirectory)\s\monorepo\backend\OrigamSetup\model_root_source\DefaultModel.zip'); }
         xcopy model_template $(build.artifactstagingdirectory)\origam-model /i /e /y
-        xcopy $(build.artifactstagingdirectory)\origam-architect $(Agent.BuildDirectory)\s\origam-source\OrigamSetup\source /i /e /y
+        xcopy $(build.artifactstagingdirectory)\origam-architect $(Agent.BuildDirectory)\s\monorepo\backend\OrigamSetup\source /i /e /y
        displayName: 'Prepare sources for setup (model)'
      - powershell: |
         & "$(WIX)bin\candle.exe" -ext WixSqlExtension -ext WixUtilExtension ArchitectSetup.wxs
         & "$(WIX)bin\light.exe" -ext WixSqlExtension -ext WixUtilExtension -ext WixNetFxExtension -sice:ICE20 -cultures:en-us -loc resources.en-us.wxl -out OrigamSetup.msi ArchitectSetup.wixobj
         New-Item -ItemType File -Path $(build.artifactstagingdirectory)\origam-setup\OrigamSetup.msi -Force
         Copy-Item OrigamSetup.msi $(build.artifactstagingdirectory)\origam-setup\OrigamSetup.msi -Force
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-source\OrigamSetup
+       workingDirectory: $(Agent.BuildDirectory)\s\monorepo\backend\OrigamSetup
        displayName: 'Build setup'
      - task: PublishBuildArtifacts@1
        displayName: 'Publish artifact: origam-setup'
@@ -210,7 +210,7 @@ jobs:
        displayName: 'origam-architect clean up'
      - task: DeleteFiles@1
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\OrigamSetup'
+         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\backend\OrigamSetup'
          Contents: |
            source\**\*.*
            server_source\**\*.*
@@ -218,13 +218,13 @@ jobs:
        displayName: 'origam-setup clean up'
      - script: |
         set MsBuildEmitSolution=1
-        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\origam-source\Origam.sln /pp -v:m
-        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\origam-source\Origam.sln /p:Configuration="Release Server" /t:Server\Origam_ServerCore:Publish -v:m
+        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\monorepo\backend\Origam.sln /pp -v:m
+        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\msbuild.exe" $(Agent.BuildDirectory)\s\monorepo\backend\Origam.sln /p:Configuration="Release Server" /t:Server\Origam_ServerCore:Publish -v:m
        displayName: 'Build HTML Server'
      - task: CopyFiles@2
        displayName: 'Copy HTML server to: $(build.artifactstagingdirectory)\origam-html'
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-source\Origam.ServerCore\bin\Release\net5.0\publish\'
+         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\backend\Origam.ServerCore\bin\Release\net5.0\publish\'
          Contents: |
            **\*.*
            !*.config

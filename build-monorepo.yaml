@@ -309,7 +309,7 @@ jobs:
          Write-Host "##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID;]$commitId"
        displayName: Store origam-source commit id
      - powershell: |
-         $htmlCommitId = (git -C $(Agent.BuildDirectory)\s\origam-html rev-parse HEAD)
+         $htmlCommitId = (git -C $(Agent.BuildDirectory)\s\monorepo\frontend-html rev-parse HEAD)
          Write-Host $htmlCommitId
          Write-Host "##vso[task.setvariable variable=ORIGAM_HTML_COMMIT_ID;]$htmlCommitId"
        displayName: Store origam-html commit id
@@ -319,7 +319,7 @@ jobs:
          Write-Host "##vso[task.setvariable variable=ORIGAM_HTML_CHAT_COMMIT_ID;]$htmlChatCommitId"
        displayName: Store origam-html-chat commit id
      - powershell: |
-         $modelCommitId = (git -C $(Agent.BuildDirectory)\s\origam-model rev-parse HEAD)
+         $modelCommitId = (git -C $(Agent.BuildDirectory)\s\monorepo\model-root rev-parse HEAD)
          Write-Host $modelCommitId
          Write-Host "##vso[task.setvariable variable=ORIGAM_MODEL_COMMIT_ID;]$modelCommitId"
        displayName: Store origam-model commit id
@@ -361,7 +361,7 @@ jobs:
      - task: CopyFiles@2
        displayName: Copy origam-model to staging directory
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\origam-model'
+         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\model-root'
          Contents: |
            model/**
            l10n/**
@@ -386,10 +386,10 @@ jobs:
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/origam-source'
+         repositoryName: 'origam/monorepo'
          action: 'delete'
          tag: '$(TAG)'
-       displayName: Delete previous GitHub origam-source/$(TAG) release
+       displayName: Delete previous GitHub monorepo/$(TAG) release
        continueOnError: true
      - task: GitHubRelease@1
        inputs:

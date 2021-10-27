@@ -394,26 +394,10 @@ jobs:
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/origam-source'
+         repositoryName: 'origam/monorepo'
          action: 'delete'
          tag: '$(TAG_LATEST)'
-       displayName: Delete previous GitHub origam-source/$(TAG_LATEST) release
-       continueOnError: true
-     - task: GitHubRelease@1
-       inputs:
-         gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/origam-html'
-         action: 'delete'
-         tag: '$(TAG)'
-       displayName: Delete previous GitHub origam-html/$(TAG) release
-       continueOnError: true
-     - task: GitHubRelease@1
-       inputs:
-         gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/origam-html'
-         action: 'delete'
-         tag: '$(TAG_LATEST)'
-       displayName: Delete previous GitHub origam-html/$(TAG_LATEST) release
+       displayName: Delete previous GitHub monorepo/$(TAG_LATEST) release
        continueOnError: true
      - task: GitHubRelease@1
        inputs:
@@ -430,22 +414,6 @@ jobs:
          action: 'delete'
          tag: '$(TAG_LATEST)'
        displayName: Delete previous GitHub origam-html-chat/$(TAG_LATEST) release
-       continueOnError: true
-     - task: GitHubRelease@1
-       inputs:
-         gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/origam-model'
-         action: 'delete'
-         tag: '$(TAG)'
-       displayName: Delete previous GitHub origam-model/$(TAG) release
-       continueOnError: true
-     - task: GitHubRelease@1
-       inputs:
-         gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/origam-model'
-         action: 'delete'
-         tag: '$(TAG_LATEST)'
-       displayName: Delete previous GitHub origam-model/$(TAG_LATEST) release
        continueOnError: true
      - script: |
         git tag -f $(TAG)

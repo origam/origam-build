@@ -351,7 +351,7 @@ jobs:
      - task: CopyFiles@2
        displayName: Copy origam-model to staging directory
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\model-root'
+         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\model-root'
          Contents: |
            model/**
            l10n/**

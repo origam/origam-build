@@ -304,25 +304,15 @@ jobs:
        fetchDepth: 1
        persistCredentials: true
      - powershell: |
-         $commitId = (git -C $(Agent.BuildDirectory)\s\monorepo\backend rev-parse HEAD)
+         $commitId = (git -C $(Agent.BuildDirectory)\s\monorepo rev-parse HEAD)
          Write-Host $commitId
-         Write-Host "##vso[task.setvariable variable=ORIGAM_SOURCE_COMMIT_ID;]$commitId"
-       displayName: Store origam-source commit id
-     - powershell: |
-         $htmlCommitId = (git -C $(Agent.BuildDirectory)\s\monorepo\frontend-html rev-parse HEAD)
-         Write-Host $htmlCommitId
-         Write-Host "##vso[task.setvariable variable=ORIGAM_HTML_COMMIT_ID;]$htmlCommitId"
-       displayName: Store origam-html commit id
+         Write-Host "##vso[task.setvariable variable=ORIGAM_MONOREPO_COMMIT_ID;]$commitId"
+       displayName: Store origam-monorepo commit id
      - powershell: |
          $htmlChatCommitId = (git -C $(Agent.BuildDirectory)\s\origam-html-chat rev-parse HEAD)
          Write-Host $htmlChatCommitId
          Write-Host "##vso[task.setvariable variable=ORIGAM_HTML_CHAT_COMMIT_ID;]$htmlChatCommitId"
        displayName: Store origam-html-chat commit id
-     - powershell: |
-         $modelCommitId = (git -C $(Agent.BuildDirectory)\s\monorepo\model-root rev-parse HEAD)
-         Write-Host $modelCommitId
-         Write-Host "##vso[task.setvariable variable=ORIGAM_MODEL_COMMIT_ID;]$modelCommitId"
-       displayName: Store origam-model commit id
      - task: DownloadBuildArtifacts@0
        displayName: Download origam-setup artifact
        inputs:
@@ -440,7 +430,7 @@ jobs:
          gitHubConnection: 'https://github.com/origam/'
          repositoryName: 'monorepo'
          action: 'create'
-         target: $(ORIGAM_SOURCE_COMMIT_ID)
+         target: $(ORIGAM_MONOREPO_COMMIT_ID)
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG)'
          title: '$(TAG)'
@@ -455,7 +445,7 @@ jobs:
            ```
            docker pull origam/server:$(TAG).$(Build.BuildId)
            ```
-           Related change logs: [HTML Client](https://github.com/origam/origam-html/releases/tag/$(TAG)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG)) | [Root Model](https://github.com/origam/origam-model/releases/tag/$(TAG))
+           Related change logs: [Monorepo](https://github.com/origam/monorepo/releases/tag/$(TAG)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG)) 
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-client.zip
            $(Build.ArtifactStagingDirectory)/origam-model.zip
@@ -472,9 +462,9 @@ jobs:
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/origam-source'
+         repositoryName: 'origam/monorepo'
          action: 'create'
-         target: $(ORIGAM_SOURCE_COMMIT_ID)
+         target: $(ORIGAM_MONOREPO_COMMIT_ID)
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG_LATEST)'
          title: '$(TAG_LATEST)'
@@ -489,7 +479,7 @@ jobs:
            ```
            docker pull origam/server:$(TAG_LATEST)
            ```
-           Related change logs: [HTML Client](https://github.com/origam/origam-html/releases/tag/$(TAG_LATEST)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST)) | [Root Model](https://github.com/origam/origam-model/releases/tag/$(TAG_LATEST))
+           Related change logs: [MONOREPO](https://github.com/origam/origam-html/releases/tag/$(TAG_LATEST)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST)) 
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip

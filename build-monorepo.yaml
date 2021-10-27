@@ -570,5 +570,5 @@ jobs:
          Dockerfile: '$(Agent.BuildDirectory)/s/OrigamDocker/Dockerfile'
          buildContext: '$(Agent.BuildDirectory)/s/OrigamDocker'
          tags: |
-           $(TAG).$(Build.BuildId)
-           $(TAG_LATEST)
+           mono_$(TAG).$(Build.BuildId)
+           mono_$(TAG_LATEST)

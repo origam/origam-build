@@ -419,26 +419,14 @@ jobs:
         git tag -f $(TAG)
         git tag -f $(TAG_LATEST)
         git push -f origin --tags
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-source
-       displayName: 'Tag origam-source'
-     - script: |
-        git tag -f $(TAG)
-        git tag -f $(TAG_LATEST)
-        git push -f origin --tags
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-html
-       displayName: 'Tag origam-html'
+       workingDirectory: $(Agent.BuildDirectory)\s\monorepo
+       displayName: 'Tag monorepo'
      - script: |
         git tag -f $(TAG)
         git tag -f $(TAG_LATEST)
         git push -f origin --tags
        workingDirectory: $(Agent.BuildDirectory)\s\origam-html-chat
        displayName: 'Tag origam-html-chat'
-     - script: |
-        git tag -f $(TAG)
-        git tag -f $(TAG_LATEST)
-        git push -f origin --tags
-       workingDirectory: $(Agent.BuildDirectory)\s\origam-model
-       displayName: 'Tag origam-model'
      - powershell: |
         & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Build.ArtifactStagingDirectory)\origam-html-server", "$(build.artifactstagingdirectory)\origam-html.zip"); }
         & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Build.ArtifactStagingDirectory)\origam-model", "$(build.artifactstagingdirectory)\origam-model.zip"); }
@@ -450,7 +438,7 @@ jobs:
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/origam-source'
+         repositoryName: 'monorepo'
          action: 'create'
          target: $(ORIGAM_SOURCE_COMMIT_ID)
          tagSource: 'userSpecifiedTag'

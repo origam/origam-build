@@ -428,7 +428,7 @@ jobs:
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'monorepo'
+         repositoryName: 'origam/monorepo'
          action: 'create'
          target: $(ORIGAM_MONOREPO_COMMIT_ID)
          tagSource: 'userSpecifiedTag'
@@ -451,7 +451,7 @@ jobs:
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
-         addChangeLog: false
+         addChangeLog: true
          changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
          changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
          changeLogType: 'commitBased'
@@ -484,7 +484,7 @@ jobs:
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
-         addChangeLog: false
+         addChangeLog: true
          changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
          changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
          changeLogType: 'commitBased'

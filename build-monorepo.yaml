@@ -7,21 +7,21 @@ variables:
 - name: YARN_CACHE_FOLDER # location of yarn cache
   value: $(Pipeline.Workspace)/.yarn
 - name: BRANCH # branch to be used
-  value: master
+  value: mono_master
 - name: VERSION_NUMBER # version number of the build
-  value: 2021.2.0.$(Build.BuildId)
+  value: mono_2021.2.0.$(Build.BuildId)
 - name: PRODUCT_NUMBER # product number to be used in the installation file
-  value: 21.2.0.$(Build.BuildId)
+  value: mono_21.2.0.$(Build.BuildId)
 - name: TAG # tag to be used
-  value: 2021.2-beta.2
+  value: mono_2021.2-beta.2
 - name: TAG_LATEST # tag to be used
-  value: master-latest
+  value: mono_master-latest
 - name: TAG_PREVIOUS # tag to compare changelog to
-  value: 2021.2-beta.1
+  value: mono_2021.2-beta.1
 - name: IS_PRERELASE
   value: true
 - name: PRODUCT_VERSION # used in setup to differentiate the version of architect
-  value: 2021.2
+  value: mono_2021.2
 
 
 resources:

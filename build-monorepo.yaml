@@ -445,7 +445,7 @@ jobs:
            ```
            docker pull origam/server:mono_$(TAG).$(Build.BuildId)
            ```
-           Related change logs: [Monorepo](https://github.com/origam/monorepo/releases/tag/$(TAG)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG)) 
+           Related change logs: [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG)) 
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-client.zip
            $(Build.ArtifactStagingDirectory)/origam-model.zip
@@ -479,7 +479,7 @@ jobs:
            ```
            docker pull origam/server:mono_$(TAG_LATEST)
            ```
-           Related change logs: [MONOREPO](https://github.com/origam/origam-html/releases/tag/$(TAG_LATEST)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST)) 
+           Related change logs: [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST)) 
          assets: |
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip

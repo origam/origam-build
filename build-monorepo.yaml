@@ -7,21 +7,21 @@ variables:
 - name: YARN_CACHE_FOLDER # location of yarn cache
   value: $(Pipeline.Workspace)/.yarn
 - name: BRANCH # branch to be used
-  value: mono_master
+  value: master
 - name: VERSION_NUMBER # version number of the build
-  value: mono_2021.2.0.$(Build.BuildId)
+  value: 2021.2.0.$(Build.BuildId)
 - name: PRODUCT_NUMBER # product number to be used in the installation file
-  value: mono_21.2.0.$(Build.BuildId)
+  value: 21.2.0.$(Build.BuildId)
 - name: TAG # tag to be used
-  value: mono_2021.2-beta.2
+  value: 2021.2-beta.2
 - name: TAG_LATEST # tag to be used
-  value: mono_master-latest
+  value: master-latest
 - name: TAG_PREVIOUS # tag to compare changelog to
-  value: mono_2021.2-beta.1
+  value: 2021.2-beta.1
 - name: IS_PRERELASE
   value: true
 - name: PRODUCT_VERSION # used in setup to differentiate the version of architect
-  value: mono_2021.2
+  value: 2021.2
 
 
 resources:
@@ -443,7 +443,7 @@ jobs:
            
            Docker image
            ```
-           docker pull origam/server:$(TAG).$(Build.BuildId)
+           docker pull origam/server:mono_$(TAG).$(Build.BuildId)
            ```
            Related change logs: [Monorepo](https://github.com/origam/monorepo/releases/tag/$(TAG)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG)) 
          assets: |
@@ -477,7 +477,7 @@ jobs:
            
            Docker image
            ```
-           docker pull origam/server:$(TAG_LATEST)
+           docker pull origam/server:mono_$(TAG_LATEST)
            ```
            Related change logs: [MONOREPO](https://github.com/origam/origam-html/releases/tag/$(TAG_LATEST)) | [HTML Chat](https://github.com/origam/origam-html-chat/releases/tag/$(TAG_LATEST)) 
          assets: |

@@ -451,7 +451,7 @@ jobs:
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
-         addChangeLog: true
+         addChangeLog: false
          changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
          changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
          changeLogType: 'commitBased'
@@ -484,7 +484,7 @@ jobs:
            $(Build.ArtifactStagingDirectory)/origam-model.zip
            $(Build.ArtifactStagingDirectory)/origam-html.zip
            $(Build.ArtifactStagingDirectory)/origam-setup/OrigamSetup.msi
-         addChangeLog: true
+         addChangeLog: false
          changeLogCompareToRelease: 'lastNonDraftReleaseByTag'
          changeLogCompareToReleaseTag: '$(TAG_PREVIOUS)'
          changeLogType: 'commitBased'

@@ -549,7 +549,7 @@ jobs:
     pool:
       vmImage: ubuntu-20.04
     steps:
-     - checkout: origam-source
+     - checkout: monorepo
        fetchDepth: 1
      - task: DownloadBuildArtifacts@0
        displayName: 'Download origam-html artifact'
@@ -557,18 +557,18 @@ jobs:
          buildType: 'current'
          downloadType: 'single'
          artifactName: 'origam-html'
-         downloadPath: '$(Agent.BuildDirectory)/s/OrigamDocker'
+         downloadPath: '$(Agent.BuildDirectory)/s/backend/OrigamDocker'
      - bash: |
         mv origam-html HTML5
-       workingDirectory: '$(Agent.BuildDirectory)/s/OrigamDocker'
+       workingDirectory: '$(Agent.BuildDirectory)/s/backend/OrigamDocker'
        displayName: Download origam-html artifact
      - task: Docker@2
        displayName: 'Build and publish docker image'
        inputs:
          containerRegistry: dockerhub
          repository: origam/server
-         Dockerfile: '$(Agent.BuildDirectory)/s/OrigamDocker/Dockerfile'
-         buildContext: '$(Agent.BuildDirectory)/s/OrigamDocker'
+         Dockerfile: '$(Agent.BuildDirectory)/s/backendOrigamDocker/Dockerfile'
+         buildContext: '$(Agent.BuildDirectory)/s/backendOrigamDocker'
          tags: |
            mono_$(TAG).$(Build.BuildId)
            mono_$(TAG_LATEST)

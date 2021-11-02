@@ -567,8 +567,8 @@ jobs:
        inputs:
          containerRegistry: dockerhub
          repository: origam/server
-         Dockerfile: '$(Agent.BuildDirectory)/s/backendOrigamDocker/Dockerfile'
-         buildContext: '$(Agent.BuildDirectory)/s/backendOrigamDocker'
+         Dockerfile: '$(Agent.BuildDirectory)/s/backend/OrigamDocker/Dockerfile'
+         buildContext: '$(Agent.BuildDirectory)/s/backend/OrigamDocker'
          tags: |
            mono_$(TAG).$(Build.BuildId)
            mono_$(TAG_LATEST)

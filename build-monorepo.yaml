@@ -46,10 +46,10 @@ resources:
      endpoint: https://github.com/origam/
      name: origam/origam-html-chat
      ref: $(BRANCH)
-   - repository: monorepo
+   - repository: origam
      type: github
      endpoint: https://github.com/origam/
-     name: origam/monorepo
+     name: origam/origam
      ref: $(BRANCH)
 
 
@@ -60,7 +60,7 @@ jobs:
     pool:
       vmImage: windows-2019
     steps:
-     - checkout: monorepo
+     - checkout: origam
        fetchDepth: 1
      - task: NuGetToolInstaller@0
        displayName: 'Use NuGet 5.8'
@@ -297,17 +297,17 @@ jobs:
     pool:
       vmImage: windows-2019
     steps:
-     - checkout: monorepo
+     - checkout: origam
        fetchDepth: 1
        persistCredentials: true
      - checkout: origam-html-chat
        fetchDepth: 1
        persistCredentials: true
      - powershell: |
-         $commitId = (git -C $(Agent.BuildDirectory)\s\monorepo rev-parse HEAD)
+         $commitId = (git -C $(Agent.BuildDirectory)\s\origam rev-parse HEAD)
          Write-Host $commitId
-         Write-Host "##vso[task.setvariable variable=ORIGAM_MONOREPO_COMMIT_ID;]$commitId"
-       displayName: Store origam-monorepo commit id
+         Write-Host "##vso[task.setvariable variable=ORIGAM_ORIGAM_COMMIT_ID;]$commitId"
+       displayName: Store origam-origam commit id
      - powershell: |
          $htmlChatCommitId = (git -C $(Agent.BuildDirectory)\s\origam-html-chat rev-parse HEAD)
          Write-Host $htmlChatCommitId
@@ -351,7 +351,7 @@ jobs:
      - task: CopyFiles@2
        displayName: Copy origam-model to staging directory
        inputs:
-         SourceFolder: '$(Agent.BuildDirectory)\s\monorepo\model-root'
+         SourceFolder: '$(Agent.BuildDirectory)\s\origam\model-root'
          Contents: |
            model/**
            l10n/**
@@ -376,18 +376,18 @@ jobs:
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/monorepo'
+         repositoryName: 'origam/origam'
          action: 'delete'
          tag: '$(TAG)'
-       displayName: Delete previous GitHub monorepo/$(TAG) release
+       displayName: Delete previous GitHub origam/$(TAG) release
        continueOnError: true
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/monorepo'
+         repositoryName: 'origam/origam'
          action: 'delete'
          tag: '$(TAG_LATEST)'
-       displayName: Delete previous GitHub monorepo/$(TAG_LATEST) release
+       displayName: Delete previous GitHub origam/$(TAG_LATEST) release
        continueOnError: true
      - task: GitHubRelease@1
        inputs:
@@ -409,8 +409,8 @@ jobs:
         git tag -f $(TAG)
         git tag -f $(TAG_LATEST)
         git push -f origin --tags
-       workingDirectory: $(Agent.BuildDirectory)\s\monorepo
-       displayName: 'Tag monorepo'
+       workingDirectory: $(Agent.BuildDirectory)\s\origam
+       displayName: 'Tag origam'
      - script: |
         git tag -f $(TAG)
         git tag -f $(TAG_LATEST)
@@ -423,14 +423,14 @@ jobs:
         & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory("$(Build.ArtifactStagingDirectory)\origam-client", "$(build.artifactstagingdirectory)\origam-client.zip"); }
        displayName: Zip files for release
      # ------------------------------------
-     # RELEASE ORIGAM_MONOREPO - TAG
+     # RELEASE ORIGAM_ORIGAM - TAG
      # ------------------------------------
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/monorepo'
+         repositoryName: 'origam/origam'
          action: 'create'
-         target: $(ORIGAM_MONOREPO_COMMIT_ID)
+         target: $(ORIGAM_ORIGAM_COMMIT_ID)
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG)'
          title: '$(TAG)'
@@ -457,14 +457,14 @@ jobs:
          changeLogType: 'commitBased'
        displayName: Create new GitHub $(TAG) release
      # ------------------------------------
-     # RELEASE ORIGAM_MONOREPO - TAG_LATEST
+     # RELEASE ORIGAM_ORIGAM - TAG_LATEST
      # ------------------------------------
      - task: GitHubRelease@1
        inputs:
          gitHubConnection: 'https://github.com/origam/'
-         repositoryName: 'origam/monorepo'
+         repositoryName: 'origam/origam'
          action: 'create'
-         target: $(ORIGAM_MONOREPO_COMMIT_ID)
+         target: $(ORIGAM_ORIGAM_COMMIT_ID)
          tagSource: 'userSpecifiedTag'
          tag: '$(TAG_LATEST)'
          title: '$(TAG_LATEST)'
@@ -549,7 +549,7 @@ jobs:
     pool:
       vmImage: ubuntu-20.04
     steps:
-     - checkout: monorepo
+     - checkout: origam
        fetchDepth: 1
      - task: DownloadBuildArtifacts@0
        displayName: 'Download origam-html artifact'
